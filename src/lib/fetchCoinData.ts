@@ -7,8 +7,8 @@ const COIN_MAP: { [key: string]: string } = {
 	eth: "ethereum",
 };
 
-const REVALIDATE = 30;
-const DAYS = 31;
+const REVALIDATE = parseInt(process.env.REVALIDATE_INTERVAL || "1800", 10);
+const MAX_DAYS = 31;
 
 /**
  * Fetches daily price data for a specified coin from multiple APIs.
@@ -28,15 +28,15 @@ export const fetchCoinData = async (coinId: string): Promise<CoinDataPoint[]> =>
 	for (const { fetchFunction, coinId } of dataFetchers) {
 		try {
 			const data: CoinDataPoint[] = await unstableCache(
-				() => fetchFunction(coinId, DAYS),
+				() => fetchFunction(coinId, MAX_DAYS),
 				["coinData", coinId],
 				{
 					revalidate: REVALIDATE,
 				}
 			)();
 
-			if (data.length >= DAYS) {
-				return data.slice(-DAYS); // Ensure the correct number of days
+			if (data.length >= MAX_DAYS) {
+				return data.slice(-MAX_DAYS); // Ensure the correct number of days
 			}
 		} catch (error) {
 			console.error(`Error fetching data for ${coinId}:`, error);

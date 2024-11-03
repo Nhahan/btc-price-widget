@@ -19,7 +19,7 @@ export const generateChart = (
 ): string => {
 	const width = options.width;
 	const height = options.height;
-	const padding = { top: 50, right: 30, bottom: 50, left: 60 };
+	const padding = { top: 50, right: 37, bottom: 35, left: 57 };
 	const chartWidth = width - padding.left - padding.right;
 	const chartHeight = height - padding.top - padding.bottom;
 
@@ -119,7 +119,7 @@ export const generateChart = (
 	const lastPoint = pointsArray[pointsArray.length - 1];
 	const secondLastPoint = pointsArray[pointsArray.length - 2];
 
-	const labelPaddingX = -33;
+	const labelPaddingX = -24;
 	const labelPaddingY = secondLastPoint.y < lastPoint.y ? 20 : -20; // Avoid overlap with previous point
 
 	const lastPriceX = Math.min(lastPoint.x + labelPaddingX, width - padding.right);

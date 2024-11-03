@@ -1,5 +1,5 @@
-import { CoinDataPoint } from './fetchCoinData';
-import { getCoinIconUrl, getCoinName } from '@/utils/utils';
+import {getCoinIconUrl, getCoinName} from '@/utils/utils';
+import {CoinDataPoint} from "@/types/types";
 
 interface ChartOptions {
 	width: number;

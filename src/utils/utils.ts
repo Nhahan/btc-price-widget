@@ -13,3 +13,11 @@ export const getCoinName = (coin: string): string => {
 	};
 	return names[coin] || '';
 };
+
+export const getCurrentTimestamp = (): number => {
+	return Date.now();
+};
+
+export const getCurrentDate = (): string => {
+	return new Date().toISOString().split('T')[0];
+};

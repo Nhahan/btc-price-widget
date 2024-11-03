@@ -1,3 +1,6 @@
+import {unstable_cache} from 'next/cache';
+import {getCurrentDate, getCurrentTimestamp} from "@/utils/utils";
+
 export interface CoinDataPoint {
 	date: string;
 	price: number;
@@ -27,7 +30,7 @@ const COIN_MAP: { [key: string]: string } = {
 /**
  * Fetches daily price data for a specified coin from multiple APIs.
  * Always fetches 31 days of data to enable caching.
- * @param coinId Coin ID used in APIs (e.g., 'btc' or 'eth')
+ * @param coinId Coin ID used in APIs (e.g., 'bitcoin' or 'ethereum')
  * @returns Array of objects containing date and price
  */
 export const fetchCoinData = async (coinId: string): Promise<CoinDataPoint[]> => {
@@ -36,13 +39,20 @@ export const fetchCoinData = async (coinId: string): Promise<CoinDataPoint[]> =>
 
 	const dataFetchers: CoinAPI[] = [
 		{ coinId: coinName, fetchFunction: fetchFromCoinGecko },
-		{ coinId: `btc-${coinName}`, fetchFunction: fetchFromCoinPaprika },
+		{ coinId: coinName, fetchFunction: fetchFromCoinPaprika },
 		{ coinId: coinName, fetchFunction: fetchFromCoinCap },
 	];
 
 	for (const { fetchFunction, coinId } of dataFetchers) {
 		try {
-			const data = await fetchFunction(coinId, days);
+			const data = await unstable_cache(
+				() => fetchFunction(coinId, days),
+				['coinData', coinId],
+				{
+					revalidate: 3600, // Cache for 1 hour
+				}
+			)();
+
 			if (data.length >= days) {
 				return data.slice(-days); // Ensure the correct number of days
 			}
@@ -55,12 +65,13 @@ export const fetchCoinData = async (coinId: string): Promise<CoinDataPoint[]> =>
 	return [];
 };
 
-/**
- * Fetches data from CoinGecko API
- */
 const fetchFromCoinGecko = async (coinId: string, days: number): Promise<CoinDataPoint[]> => {
 	const response = await fetch(
-		`https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=${days}&interval=daily`
+		`https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=${days}&interval=daily`,
+		{
+			// Cache the external API response for 1 hour
+			next: { revalidate: 3600 },
+		}
 	);
 
 	if (!response.ok) {
@@ -70,15 +81,20 @@ const fetchFromCoinGecko = async (coinId: string, days: number): Promise<CoinDat
 	const data = await response.json();
 	const prices: [number, number][] = data.prices;
 
-	return formatCoinData(prices);
+	return prices.map(([timestamp, price]) => ({
+		date: new Date(timestamp).toISOString().slice(0, 10), // YYYY-MM-DD format
+		price,
+	}));
 };
 
-/**
- * Fetches data from CoinPaprika API
- */
 const fetchFromCoinPaprika = async (coinId: string, days: number): Promise<CoinDataPoint[]> => {
 	const response = await fetch(
-		`https://api.coinpaprika.com/v1/coins/${coinId}/ohlcv/historical?start=${getStartDate(days)}&end=${getCurrentDate()}`
+		`https://api.coinpaprika.com/v1/coins/${coinId}/ohlcv/historical?start=${getStartDate(
+			days
+		)}&end=${getCurrentDate()}`,
+		{
+			next: { revalidate: 3600 },
+		}
 	);
 
 	if (!response.ok) {
@@ -92,12 +108,14 @@ const fetchFromCoinPaprika = async (coinId: string, days: number): Promise<CoinD
 	}));
 };
 
-/**
- * Fetches data from CoinCap API
- */
 const fetchFromCoinCap = async (coinId: string, days: number): Promise<CoinDataPoint[]> => {
 	const response = await fetch(
-		`https://api.coincap.io/v2/assets/${coinId}/history?interval=d1&range=${days}d`
+		`https://api.coincap.io/v2/assets/${coinId}/history?interval=d1&start=${getStartTimestamp(
+			days
+		)}&end=${getCurrentTimestamp()}`,
+		{
+			next: { revalidate: 3600 },
+		}
 	);
 
 	if (!response.ok) {
@@ -105,39 +123,22 @@ const fetchFromCoinCap = async (coinId: string, days: number): Promise<CoinDataP
 	}
 
 	const data = await response.json();
-	const prices: { priceUsd: number; time: number }[] = data.data;
+	const prices: { priceUsd: string; time: number }[] = data.data;
 
 	return prices.map((item) => ({
 		date: new Date(item.time).toISOString().slice(0, 10), // YYYY-MM-DD format
-		price: item.priceUsd,
+		price: parseFloat(item.priceUsd),
 	}));
 };
 
-/**
- * Formats the raw price data into CoinDataPoint array.
- * @param prices Raw price data from APIs.
- * @returns Array of CoinDataPoint.
- */
-const formatCoinData = (prices: [number, number][]): CoinDataPoint[] => {
-	return prices.map(([timestamp, price]) => ({
-		date: new Date(timestamp).toISOString().slice(0, 10), // YYYY-MM-DD format
-		price,
-	}));
-};
-
-/**
- * Get the current date in YYYY-MM-DD format.
- */
-const getCurrentDate = (): string => {
-	return new Date().toISOString().split('T')[0];
-};
-
-/**
- * Get the start date for fetching historical data based on the number of days.
- * @param days Number of days to go back.
- */
 const getStartDate = (days: number): string => {
 	const startDate = new Date();
 	startDate.setDate(startDate.getDate() - days);
 	return startDate.toISOString().split('T')[0]; // YYYY-MM-DD format
+};
+
+const getStartTimestamp = (days: number): number => {
+	const startDate = new Date();
+	startDate.setDate(startDate.getDate() - days);
+	return startDate.getTime();
 };

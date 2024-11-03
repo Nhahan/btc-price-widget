@@ -1,5 +1,5 @@
-import {CoinDataPoint} from './fetchCoinData';
-import {getCoinIconUrl, getCoinName} from '@/utils/utils';
+import { CoinDataPoint } from './fetchCoinData';
+import { getCoinIconUrl, getCoinName } from '@/utils/utils';
 
 interface ChartOptions {
 	width: number;
@@ -57,7 +57,11 @@ export const generateChart = (
       stroke-width="2"
       ${totalLength > 0 ? `stroke-dasharray="${totalLength}" stroke-dashoffset="${totalLength}"` : ''}
     >
-      ${totalLength > 0 ? `<animate attributeName="stroke-dashoffset" from="${totalLength}" to="0" dur="2s" fill="freeze" />` : ''}
+      ${
+		totalLength > 0
+			? `<animate attributeName="stroke-dashoffset" from="${totalLength}" to="0" dur="2s" fill="freeze" />`
+			: ''
+	}
     </path>
   `;
 
@@ -122,33 +126,30 @@ export const generateChart = (
 	const lastPriceY = lastPoint.y + labelPaddingY;
 
 	const lastPriceLabel = `
-      <text x="${lastPriceX}" y="${lastPriceY}" fill="${textColor}" font-size="12">
-        $${lastPrice.toFixed(2)}
-      </text>
-    `;
+    <text x="${lastPriceX}" y="${lastPriceY}" fill="${textColor}" font-size="12">
+      $${lastPrice.toFixed(2)}
+    </text>
+  `;
 
 	return `
 <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
   <rect x="0" y="0" width="100%" height="100%" fill="${bgColor}" rx="4.5" />
 
-	<g transform="translate(${titleGroupTransformX}, 35)">
-	  ${
+  <g transform="translate(${titleGroupTransformX}, 35)">
+    ${
 		showIcon
 			? `<image href="${coinIconUrl}" x="0" y="-20" width="24" height="24" />
-	   <text x="30" y="0" text-anchor="start" fill="${textColor}" font-size="20" font-weight="600">${titleText}</text>`
+       <text x="30" y="0" text-anchor="start" fill="${textColor}" font-size="20" font-weight="600">${titleText}</text>`
 			: `<text x="0" y="0" text-anchor="start" fill="${textColor}" font-size="20" font-weight="600">${titleText}</text>`
 	}
-	</g>
+  </g>
 
   ${yLabels}
   ${xLabels}
   ${animatePath}
   ${circles}
   ${lastPriceLabel}
-
-  <text x="${width - 10}" y="${height - 10}" text-anchor="end" fill="${textColor}" font-size="12">
-    Last Updated: ${new Date().toLocaleDateString()}
-  </text>
+  
 </svg>
   `.trim();
 };

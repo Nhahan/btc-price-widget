@@ -1,5 +1,5 @@
-import {unstable_cache} from 'next/cache';
 import {getCurrentDate, getCurrentTimestamp} from "@/utils/utils";
+import {unstableCache} from "@/utils/cacheUtils";
 
 export interface CoinDataPoint {
 	date: string;
@@ -27,6 +27,8 @@ const COIN_MAP: { [key: string]: string } = {
 	eth: 'ethereum',
 };
 
+const revalidate = 30;
+
 /**
  * Fetches daily price data for a specified coin from multiple APIs.
  * Always fetches 31 days of data to enable caching.
@@ -45,11 +47,11 @@ export const fetchCoinData = async (coinId: string): Promise<CoinDataPoint[]> =>
 
 	for (const { fetchFunction, coinId } of dataFetchers) {
 		try {
-			const data = await unstable_cache(
+			const data = await unstableCache(
 				() => fetchFunction(coinId, days),
 				['coinData', coinId],
 				{
-					revalidate: 3600, // Cache for 1 hour
+					revalidate,
 				}
 			)();
 
@@ -69,8 +71,7 @@ const fetchFromCoinGecko = async (coinId: string, days: number): Promise<CoinDat
 	const response = await fetch(
 		`https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=${days}&interval=daily`,
 		{
-			// Cache the external API response for 1 hour
-			next: { revalidate: 3600 },
+			next: { revalidate },
 		}
 	);
 
@@ -93,7 +94,7 @@ const fetchFromCoinPaprika = async (coinId: string, days: number): Promise<CoinD
 			days
 		)}&end=${getCurrentDate()}`,
 		{
-			next: { revalidate: 3600 },
+			next: { revalidate },
 		}
 	);
 
@@ -114,7 +115,7 @@ const fetchFromCoinCap = async (coinId: string, days: number): Promise<CoinDataP
 			days
 		)}&end=${getCurrentTimestamp()}`,
 		{
-			next: { revalidate: 3600 },
+			next: { revalidate },
 		}
 	);
 

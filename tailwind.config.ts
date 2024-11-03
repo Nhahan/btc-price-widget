@@ -17,20 +17,13 @@ const config: Config = {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
-        typing: {
-          '0%': { width: '0%' },
-          '99%': { width: '100%' },
-          '100%': {  width: '100%', borderColor: 'transparent' },
-        },
-        'blink-caret': {
-          '0%, 100%': { borderColor: 'transparent' },
-          '50%': { borderColor: 'currentColor' },
+        blink: {
+          '50%': { 'border-color': 'transparent' },
         },
       },
       animation: {
         'fade-in': 'fade-in 0.75s ease-in-out forwards',
-        typing: 'typing 1.5s steps(15, end) forwards',
-        'blink-caret': 'blink-caret 0.75s step-end infinite',
+        blink: 'blink 0.7s step-end infinite',
       },
     },
   },

@@ -1,5 +1,5 @@
-import {getCurrentDate, getCurrentTimestamp} from "@/utils/utils";
-import {unstableCache} from "@/utils/cacheUtils";
+import { getCurrentDate, getCurrentTimestamp } from "@/utils/utils";
+import { unstableCache } from "@/utils/cacheUtils";
 
 export interface CoinDataPoint {
 	date: string;
@@ -23,8 +23,8 @@ interface CoinAPI {
 }
 
 const COIN_MAP: { [key: string]: string } = {
-	btc: 'bitcoin',
-	eth: 'ethereum',
+	btc: "bitcoin",
+	eth: "ethereum",
 };
 
 const revalidate = 30;
@@ -37,7 +37,7 @@ const revalidate = 30;
  */
 export const fetchCoinData = async (coinId: string): Promise<CoinDataPoint[]> => {
 	const days = 31;
-	const coinName = COIN_MAP[coinId] || 'bitcoin';
+	const coinName = COIN_MAP[coinId] || "bitcoin";
 
 	const dataFetchers: CoinAPI[] = [
 		{ coinId: coinName, fetchFunction: fetchFromCoinGecko },
@@ -49,7 +49,7 @@ export const fetchCoinData = async (coinId: string): Promise<CoinDataPoint[]> =>
 		try {
 			const data = await unstableCache(
 				() => fetchFunction(coinId, days),
-				['coinData', coinId],
+				["coinData", coinId],
 				{
 					revalidate,
 				}
@@ -63,13 +63,13 @@ export const fetchCoinData = async (coinId: string): Promise<CoinDataPoint[]> =>
 		}
 	}
 
-	console.error('Failed to fetch data from all sources.');
+	console.error("Failed to fetch data from all sources.");
 	return [];
 };
 
 const fetchFromCoinGecko = async (coinId: string, days: number): Promise<CoinDataPoint[]> => {
 	const response = await fetch(
-		`https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=${days}&interval=daily`,
+		`${process.env.COINGECKO_API_URL}/coins/${coinId}/market_chart?vs_currency=usd&days=${days}&interval=daily`,
 		{
 			next: { revalidate },
 		}
@@ -90,7 +90,7 @@ const fetchFromCoinGecko = async (coinId: string, days: number): Promise<CoinDat
 
 const fetchFromCoinPaprika = async (coinId: string, days: number): Promise<CoinDataPoint[]> => {
 	const response = await fetch(
-		`https://api.coinpaprika.com/v1/coins/${coinId}/ohlcv/historical?start=${getStartDate(
+		`${process.env.COINPAPRIKA_API_URL}/coins/${coinId}/ohlcv/historical?start=${getStartDate(
 			days
 		)}&end=${getCurrentDate()}`,
 		{
@@ -104,14 +104,14 @@ const fetchFromCoinPaprika = async (coinId: string, days: number): Promise<CoinD
 
 	const data: CoinPaprikaData[] = await response.json();
 	return data.map((item) => ({
-		date: item.time_open.split('T')[0], // YYYY-MM-DD format
+		date: item.time_open.split("T")[0], // YYYY-MM-DD format
 		price: item.close,
 	}));
 };
 
 const fetchFromCoinCap = async (coinId: string, days: number): Promise<CoinDataPoint[]> => {
 	const response = await fetch(
-		`https://api.coincap.io/v2/assets/${coinId}/history?interval=d1&start=${getStartTimestamp(
+		`${process.env.COINCAP_API_URL}/assets/${coinId}/history?interval=d1&start=${getStartTimestamp(
 			days
 		)}&end=${getCurrentTimestamp()}`,
 		{
@@ -135,7 +135,7 @@ const fetchFromCoinCap = async (coinId: string, days: number): Promise<CoinDataP
 const getStartDate = (days: number): string => {
 	const startDate = new Date();
 	startDate.setDate(startDate.getDate() - days);
-	return startDate.toISOString().split('T')[0]; // YYYY-MM-DD format
+	return startDate.toISOString().split("T")[0]; // YYYY-MM-DD format
 };
 
 const getStartTimestamp = (days: number): number => {

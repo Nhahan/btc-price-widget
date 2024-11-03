@@ -1,5 +1,5 @@
 import './globals.css';
-import {ReactNode} from "react";
+import {ReactNode, Suspense} from "react";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -8,7 +8,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <title>My App</title>
     </head>
     <body>
-    {children}
+    <Suspense fallback={<div>Loading...</div>}>
+      {children}
+    </Suspense>
     </body>
     </html>
   );

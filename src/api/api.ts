@@ -1,7 +1,8 @@
 import {CoinDataPoint, CoinPaprikaData} from "@/types/types";
 import {getCurrentDate, getCurrentTimestamp} from "@/utils/utils";
+import {REVALIDATE_INTERVAL} from "@/lib/config";
 
-const revalidate = 30;
+const revalidate = REVALIDATE_INTERVAL;
 
 export const fetchFromCoinGecko = async (coinId: string, days: number): Promise<CoinDataPoint[]> => {
 	const response = await fetch(

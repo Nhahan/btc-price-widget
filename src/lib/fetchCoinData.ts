@@ -7,7 +7,8 @@ const COIN_MAP: { [key: string]: string } = {
 	eth: "ethereum",
 };
 
-const revalidate = 30;
+const REVALIDATE = 30;
+const DAYS = 31;
 
 /**
  * Fetches daily price data for a specified coin from multiple APIs.
@@ -16,7 +17,6 @@ const revalidate = 30;
  * @returns Array of objects containing date and price
  */
 export const fetchCoinData = async (coinId: string): Promise<CoinDataPoint[]> => {
-	const days = 31;
 	const coinName = COIN_MAP[coinId] || "bitcoin";
 
 	const dataFetchers: CoinAPI[] = [
@@ -28,15 +28,15 @@ export const fetchCoinData = async (coinId: string): Promise<CoinDataPoint[]> =>
 	for (const { fetchFunction, coinId } of dataFetchers) {
 		try {
 			const data: CoinDataPoint[] = await unstableCache(
-				() => fetchFunction(coinId, days),
+				() => fetchFunction(coinId, DAYS),
 				["coinData", coinId],
 				{
-					revalidate,
+					revalidate: REVALIDATE,
 				}
 			)();
 
-			if (data.length >= days) {
-				return data.slice(-days); // Ensure the correct number of days
+			if (data.length >= DAYS) {
+				return data.slice(-DAYS); // Ensure the correct number of days
 			}
 		} catch (error) {
 			console.error(`Error fetching data for ${coinId}:`, error);

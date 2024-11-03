@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { generateChart } from '@/lib/generateChart';
-import { fetchCoinData } from '@/lib/fetchCoinData';
+import {NextRequest, NextResponse} from 'next/server';
+import {generateChart} from '@/lib/generateChart';
+import {fetchCoinData} from '@/lib/fetchCoinData';
+import {REVALIDATE_INTERVAL} from "@/lib/config";
 
 export async function GET(request: NextRequest) {
 	const { searchParams } = new URL(request.url);
@@ -26,7 +27,6 @@ export async function GET(request: NextRequest) {
 	const showIcon = searchParams.get('icon') !== 'false';
 
 	try {
-		// Fetch coin data with caching
 		const coinData = await fetchCoinData(coinId);
 
 		if (coinData.length === 0) {
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
 			status: 200,
 			headers: {
 				'Content-Type': 'image/svg+xml',
-				// Remove Cache-Control header to prevent caching the SVG itself
+				'Cache-Control': `public, s-maxage=${REVALIDATE_INTERVAL}, stale-while-revalidate=86400`,
 			},
 		});
 	} catch (error) {

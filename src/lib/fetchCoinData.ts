@@ -1,13 +1,13 @@
 import {unstableCache} from "@/utils/cacheUtils";
 import {CoinAPI, CoinDataPoint} from "@/types/types";
 import {fetchFromCoinCap, fetchFromCoinGecko, fetchFromCoinPaprika} from "@/api/api";
+import {REVALIDATE_INTERVAL} from "@/lib/config";
 
 const COIN_MAP: { [key: string]: string } = {
 	btc: "bitcoin",
 	eth: "ethereum",
 };
 
-const REVALIDATE = parseInt(process.env.REVALIDATE_INTERVAL || "1800", 10);
 const MAX_DAYS = 31;
 
 /**
@@ -31,7 +31,7 @@ export const fetchCoinData = async (coinId: string): Promise<CoinDataPoint[]> =>
 				() => fetchFunction(coinId, MAX_DAYS),
 				["coinData", coinId],
 				{
-					revalidate: REVALIDATE,
+					revalidate: REVALIDATE_INTERVAL,
 				}
 			)();
 

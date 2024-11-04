@@ -17,17 +17,10 @@ export const generateChart = (
   days: number,
   options: ChartOptions,
 ): string => {
-  const width = options.width;
-  const height = options.height;
+  const { width, height, bgColor, lineColor, textColor, pointColor, showIcon } = options;
   const padding = { top: 50, right: 37, bottom: 35, left: 57 };
   const chartWidth = width - padding.left - padding.right;
   const chartHeight = height - padding.top - padding.bottom;
-
-  const bgColor = options.bgColor;
-  const lineColor = options.lineColor;
-  const textColor = options.textColor;
-  const pointColor = options.pointColor;
-  const showIcon = options.showIcon;
 
   const maxPrice = Math.max(...data.map((d) => d.price));
   const minPrice = Math.min(...data.map((d) => d.price));
@@ -62,6 +55,8 @@ export const generateChart = (
       }
     </path>
   `;
+
+  console.log('options', options);
 
   const circles =
     data.length <= 50
@@ -101,7 +96,9 @@ export const generateChart = (
         <text x="${padding.left - 10}" y="${y}" text-anchor="end" fill="${textColor}" font-size="12">
           $${(price / 1000).toFixed(1)}k
         </text>
-        <line x1="${padding.left}" y1="${y}" x2="${width - padding.right}" y2="${y}" stroke="${textColor}" stroke-opacity="0.2" />
+        <line x1="${padding.left}" y1="${y}" x2="${
+          width - padding.right
+        }" y2="${y}" stroke="${textColor}" stroke-opacity="0.2" />
       `;
     })
     .join('');
@@ -118,7 +115,7 @@ export const generateChart = (
   const secondLastPoint = pointsArray[pointsArray.length - 2];
 
   const labelPaddingX = -24;
-  const labelPaddingY = secondLastPoint.y < lastPoint.y ? 20 : -20; // Avoid overlap with previous point
+  const labelPaddingY = secondLastPoint.y < lastPoint.y ? 20 : -20;
 
   const lastPriceX = Math.min(lastPoint.x + labelPaddingX, width - padding.right);
   const lastPriceY = lastPoint.y + labelPaddingY;
@@ -130,24 +127,23 @@ export const generateChart = (
   `;
 
   return `
-<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
-  <rect x="0" y="0" width="100%" height="100%" fill="${bgColor}" rx="4.5" />
+    <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
+      <rect x="0" y="0" width="100%" height="100%" fill="${bgColor}" rx="4.5" />
 
-  <g transform="translate(${titleGroupTransformX}, 35)">
-    ${
-      showIcon
-        ? `<image href="${coinIconUrl}" x="0" y="-20" width="24" height="24" />
-       <text x="30" y="0" text-anchor="start" fill="${textColor}" font-size="20" font-weight="600">${titleText}</text>`
-        : `<text x="0" y="0" text-anchor="start" fill="${textColor}" font-size="20" font-weight="600">${titleText}</text>`
-    }
-  </g>
+      <g transform="translate(${titleGroupTransformX}, 35)">
+        ${
+          showIcon
+            ? `<image href="${coinIconUrl}" x="0" y="-20" width="24" height="24" />
+               <text x="30" y="0" text-anchor="start" fill="${textColor}" font-size="20" font-weight="600">${titleText}</text>`
+            : `<text x="0" y="0" text-anchor="start" fill="${textColor}" font-size="20" font-weight="600">${titleText}</text>`
+        }
+      </g>
 
-  ${yLabels}
-  ${xLabels}
-  ${animatePath}
-  ${circles}
-  ${lastPriceLabel}
-  
-</svg>
+      ${yLabels}
+      ${xLabels}
+      ${animatePath}
+      ${circles}
+      ${lastPriceLabel}
+    </svg>
   `.trim();
 };

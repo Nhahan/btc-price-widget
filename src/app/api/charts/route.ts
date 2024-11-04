@@ -3,21 +3,20 @@ import { generateChart } from '@/lib/generateChart';
 import { fetchCoinData } from '@/lib/fetchCoinData';
 import { REVALIDATE_INTERVAL } from '@/lib/config';
 import { CoinSymbol } from '@/types/types';
+import { themes } from '@/types/theme';
+import { getValidatedCoin, getValidatedDays, getValidatedShowIcon, getValidatedTheme } from '@/utils/validation';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
 
-  const coinSymbol: CoinSymbol = searchParams.get('coin')?.toLowerCase() === 'eth' ? 'eth' : 'btc';
-  const days = parseInt(searchParams.get('days') || '', 10);
-  const validatedDays = days >= 7 && days <= 31 ? days : 30;
+  const coinSymbol: CoinSymbol = getValidatedCoin(searchParams.get('coin')) as CoinSymbol;
+  const validatedDays = getValidatedDays(searchParams.get('days'));
+  const themeParam = getValidatedTheme(searchParams.get('theme'));
+  const theme = themes[themeParam];
 
   const width = parseInt(searchParams.get('width') || '', 10) || 700;
   const height = parseInt(searchParams.get('height') || '', 10) || 350;
-  const bgColor = searchParams.get('bg_color') || '#0d1117';
-  const lineColor = searchParams.get('line_color') || '#58a6ff';
-  const textColor = searchParams.get('text_color') || '#c9d1d9';
-  const pointColor = searchParams.get('point_color') || '#f78166';
-  const showIcon = searchParams.get('icon') !== 'false';
+  const showIcon = getValidatedShowIcon(searchParams.get('icon'));
 
   try {
     const coinData = await fetchCoinData(coinSymbol);
@@ -31,10 +30,7 @@ export async function GET(request: NextRequest) {
     const chart = generateChart(slicedData, coinSymbol, validatedDays, {
       width,
       height,
-      bgColor,
-      lineColor,
-      textColor,
-      pointColor,
+      ...theme,
       showIcon,
     });
 
@@ -42,7 +38,7 @@ export async function GET(request: NextRequest) {
       status: 200,
       headers: {
         'Content-Type': 'image/svg+xml',
-        'Cache-Control': `public, s-maxage=${REVALIDATE_INTERVAL}, stale-while-revalidate=43200`,
+        'Cache-Control': `public, s-maxage=${REVALIDATE_INTERVAL}, stale-while-revalidate=28800`,
       },
     });
   } catch (error) {

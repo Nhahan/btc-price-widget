@@ -1,5 +1,5 @@
 import './globals.css';
-import { ReactNode, Suspense } from 'react';
+import { ReactNode } from 'react';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -7,9 +7,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <title>Cryptocurrency Chart</title>
       </head>
-      <body>
-        <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

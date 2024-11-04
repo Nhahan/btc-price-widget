@@ -21,3 +21,13 @@ export interface CoinAPI {
 
 export type CoinSymbol = 'btc' | 'eth';
 export type CoinId = 'bitcoin' | 'ethereum';
+
+export interface ChartOptions {
+  width: number;
+  height: number;
+  bgColor: string;
+  lineColor: string;
+  textColor: string;
+  pointColor: string;
+  showIcon: boolean;
+}

@@ -1,15 +1,5 @@
 import { getCoinIconUrl, getCoinName } from '@/utils/utils';
-import { CoinDataPoint } from '@/types/types';
-
-interface ChartOptions {
-  width: number;
-  height: number;
-  bgColor: string;
-  lineColor: string;
-  textColor: string;
-  pointColor: string;
-  showIcon: boolean;
-}
+import { ChartOptions, CoinDataPoint } from '@/types/types';
 
 export const generateChart = (
   data: CoinDataPoint[],
@@ -55,8 +45,6 @@ export const generateChart = (
       }
     </path>
   `;
-
-  console.log('options', options);
 
   const circles =
     data.length <= 50
@@ -114,8 +102,16 @@ export const generateChart = (
   const lastPoint = pointsArray[pointsArray.length - 1];
   const secondLastPoint = pointsArray[pointsArray.length - 2];
 
+  // 마지막 값이 차트 하단 근처에 위치할 경우 labelPaddingY 조정
+  const minYThreshold = height - padding.bottom - 10; // 최소 y 위치로서 차트 하단 패딩 기준 값
+  const isLastPointLow = lastPoint.y > minYThreshold; // 마지막 값이 차트 하단에 너무 가까운지 확인
+
   const labelPaddingX = -24;
-  const labelPaddingY = secondLastPoint.y < lastPoint.y ? 20 : -20;
+  let labelPaddingY = secondLastPoint.y < lastPoint.y ? 20 : -20;
+
+  if (isLastPointLow && lastPoint.y >= secondLastPoint.y) {
+    labelPaddingY = -5; // 날짜 텍스트와 겹치는 경우 상단으로 5 만큼 이동
+  }
 
   const lastPriceX = Math.min(lastPoint.x + labelPaddingX, width - padding.right);
   const lastPriceY = lastPoint.y + labelPaddingY;

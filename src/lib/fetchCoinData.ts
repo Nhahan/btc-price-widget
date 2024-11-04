@@ -1,6 +1,6 @@
 import { unstableCache } from '@/utils/cacheUtils';
 import { CoinAPI, CoinDataPoint, CoinId, CoinSymbol } from '@/types/types';
-import { fetchFromCoinCap, fetchFromCoinGecko, fetchFromCoinPaprika } from '@/api/api';
+import { fetchFromCoinCap, fetchFromCoinGecko, fetchFromCoinPaprika } from '@/api/coin';
 import { REVALIDATE_INTERVAL } from '@/lib/config';
 
 const COIN_MAP: Record<CoinSymbol, CoinId> = {

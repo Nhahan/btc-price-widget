@@ -22,6 +22,29 @@ export const getCurrentDate = (): string => {
   return new Date().toISOString().split('T')[0];
 };
 
+export function generateNonce(): string {
+  return Array.from(crypto.getRandomValues(new Uint8Array(8)))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+export function generateFakeCoinData(days = 31, basePrice = 82500, variation = 2500) {
+  let price = basePrice,
+    lt = ((Math.random() - 0.5) * variation) / 100,
+    st = ((Math.random() - 0.5) * variation) / 50;
+
+  return Array.from({ length: days }, (_, i) => {
+    const date = new Date(Date.now() - (days - 1 - i) * 86400000).toISOString().split('T')[0];
+    if (Math.random() < 0.15) lt = ((Math.random() - 0.5) * variation) / 100;
+    if (Math.random() < 0.5) st = ((Math.random() - 0.5) * variation) / 50;
+
+    price = Math.max(price + lt + st + ((Math.random() - 0.5) * variation) / 10, 0);
+    if (i % 15 === 0) lt += ((Math.random() - 0.5) * variation) / 20;
+
+    return { date, price: parseFloat(price.toFixed(2)) };
+  });
+}
+
 const bitcoinIconBase64 =
   'data:image/webp;base64,UklGRsAFAABXRUJQVlA4TLMFAAAvMUAMEOowkLZN61/2tt9CREwAW4eA2XjLyf//nRP/I8+L5vfufr/fHwVfIZGBgAigSWOMBHoXEUGUk4CcjIxVQJXYi5g6IoAREScFCb1IioQIiJQIQhRjRNBhrGNEIKTtKEACUhirhDoy/igSek8mbRuTMZZ7gwRJsmkrnr5t27Zta2XubNu2bdu2bdu2fRi4baQoOV6mu3uD3Pr/lT3Zv3N3d3d3d3d3d/c8z7k3K2SM1JmCTXLOTYlswi7sA6WNSJ86YyL97TipMygdh9vyttmArRjlYSG2omUA0qdmIliC85SRkt8UrJIBaG2BlNw2b60wABHm/4uNECQBAAg0j8h2s23btm3bOtm2bdu2bdsM/Vfktm3D7nlK+4goERSokUAfWzzwxB4jZGEAPWaAAQ4y+NPGNvd88sd/t8cXj+zTSyRqEAFpxilocWGMF0BGPlgiFC5gDYAM77FeLZFzEmE5VQhI6DHbq6Wyiw2YRUBALM+1geepgL6AIZp7tZlMI5IFVkZqY9m6keE6wzWHBRBWwJgBagaIpKUxxNIpaKo5hAv569JSdNlB0jEHQgpTgEVNuQOmBCCI7mZh4bJY+N/lp5ekgHtQPO+So2znRG4FNSU1YHeCLk81hQWQknGdX2DpqXF2NQEg2f5YekqqQyYFJOFnpANImawpzABLtG95yuPt7k1ZW5CtgGvpEKZ270UpUZUazP9XsPTTVI7gbgf39LODJ1h66tQeuztfk4apPaCny3ZksgNjX9cxvMOjczUt2cBbDLOeLs2ZPEPbgzrN7KUhXWUpmf131KfjxpsM3CDa4li3pg8B0sy4qO4ugpC6Ohsqo+kDuUJJORWxnf6akZsCdDy5W8Xy01R57j9bOhgiA8oku9BE9POQnwPuFJ3YDYDv6RdZkcqBbRkAYHpPqQ6zAIqIX4wjcK35ORBl28X/B1CdeiEdyB5th67OKdtn/y1SVuRF8oDu/ZVHFF4mAKQ4mEkzwJgzeTs7AwCN6bYEhoj5b2tYzqJbg9DeCQA7/lLjUsrLLcVze7JoJFwjBB9XBSETuwbQv41zoci6OMW2LRh0kgkMUec1HxJlGyOA7Z8OZLcCdtcSaD+pDGxbUZnqXUnS3YwZ3/lD4WUAwNLTZv9tcDtPatPU3P67qhAKkSElFIjDajwf0t5xkNPh61SH7ksyMrHOItwpMr4rACM7ybn4urQO78CgMryjUBlrOg0WfdmQSNsYAfzS9p3IFWnrr7P/DmDxKU/cKCIoiEeLt+yh4DIAYItJwc5i7PgJABrS8UMnb8ELwTPpSILtvQNwz1/qXEqps/SLUuwESIO85fx7yFlLxvCXav6lvk2y78yeATx3IJsqVliQdOf/B8DSU2PsxMjvrH+AxhRvrsG4+H8AUJtGnQlNF5dpDgOAs3CZk7EISdxLnb0lN7k7qNPjiwhZelLSkRx2ZH4UZ7fRnSkmdu1OMUFE0WAgyXMCL0pXpLy3K9N7PoAqnf0f2kH/Nkd3qr70N/kB9PZEPEq9hTVpByYfySfY+/cZKOn6F07EAQwRMZJOyF+GycSAf7VpPiG4v3mD8iUNRsR1tjMvi9xLwGGc3U0B/gD0dKmtYwPb+fiit6sVqQiUFqUsQTpa4pdm7xvuH/M7mP/v21cOZL11dG4OBJdklILcBpQsJKeCC/lGd4LuLr63I+MrjOz4kdCE0CUlcdEf7WLwMhXwOd7uVanOvFjhK8VTNLXnSq4j9fAH0sE7UpORmbQEWmyUp7Sva+kXwdeD9rPR6Rq6s4uzvp1+8KaA30cjJew7avaiZOcYxUgL//Pa2BdoRk44GWgKq8hHXijIndWEcVrhiBJBxZLNcjibCV4UOkTsrTK4I390MIr98HHFzYkcffP/Px5o+NcF8abLXznhdbxtas3ikpmDC4bbYzR8ANZp1NcSQMw8gnHYOAp+yZMAAA==';
 const ethereumIconBase64 =

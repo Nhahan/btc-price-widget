@@ -1,5 +1,3 @@
-'use client';
-
 import { useEffect, useState } from 'react';
 
 type Props = {
@@ -15,7 +13,7 @@ function TypingTitle({ title }: Props) {
       setShowCursor(true);
       for (let i = 0; i < title.length; i++) {
         setDisplayedTitle((prev) => prev + title.charAt(i));
-        const delay = Math.floor(Math.random() * 175) + 65;
+        const delay = Math.floor(Math.random() * 150) + 50;
         await new Promise((resolve) => setTimeout(resolve, delay));
       }
       setShowCursor(false);

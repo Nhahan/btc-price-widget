@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import {Suspense, useEffect, useState} from 'react';
-import {useSearchParams} from 'next/navigation';
-import {getCoinIconUrl} from '@/utils/utils';
-import Image from "next/image";
-import TypingTitle from "@/component/TypingTitle";
+import { Suspense, useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { getCoinIconUrl } from '@/utils/utils';
+import Image from 'next/image';
+import TypingTitle from '@/component/TypingTitle';
 
 const VALID_COINS = ['btc', 'eth'];
 const MIN_DAYS = 7;
@@ -32,28 +32,19 @@ function HomePage() {
   }, [coin, days]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
-      <div className="flex items-center mb-6 space-x-2">
-        {isLoaded && (
-          <Image
-            src={getCoinIconUrl(coin)}
-            alt={`${coin.toUpperCase()} icon`}
-            width={32}
-            height={32}
-          />
-        )}
+    <div className='flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4'>
+      <div className='flex items-center mb-6 space-x-2'>
+        {isLoaded && <Image src={getCoinIconUrl(coin)} alt={`${coin.toUpperCase()} icon`} width={32} height={32} />}
         <TypingTitle title={title} />
       </div>
 
-      <div className="w-[700px] h-[350px] overflow-hidden">
+      <div className='w-[700px] h-[350px] overflow-hidden'>
         <Suspense fallback={<div>Loading chart...</div>}>
           {chartUrl && (
             <img
               src={chartUrl}
               alt={`${coin.toUpperCase()} Price Chart`}
-              className={`w-full h-full object-cover ${
-                isLoaded ? 'animate-fade-in' : 'opacity-0'
-              }`}
+              className={`w-full h-full object-cover ${isLoaded ? 'animate-fade-in' : 'opacity-0'}`}
               onLoad={() => setIsLoaded(true)}
             />
           )}

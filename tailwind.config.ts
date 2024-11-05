@@ -30,7 +30,7 @@ const config: Config = {
       animation: {
         'fade-in': 'fade-in 0.75s ease-in-out forwards',
         blink: 'blink 0.7s step-end infinite',
-        shine: 'shine 0.75s ease-in-out 1.25s forwards',
+        shine: 'shine 0.75s ease-in-out 1s forwards',
       },
     },
   },

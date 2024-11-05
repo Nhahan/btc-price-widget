@@ -1,9 +1,13 @@
 import FadeIn from '../motion/FadeIn';
 import { themes } from '@/types/theme';
 import ParallaxSection from '@/component/motion/ParallaxSection';
+import TypingEffect from '@/component/TypingEffect';
+import useRevealOnScroll from '@/hook/useRevealOnScroll';
 
 export default function FeaturesSection() {
   const theme = themes['default'];
+
+  const { isRevealed, revealRef } = useRevealOnScroll();
 
   const features = [
     { title: 'Real-time Data', description: 'Live cryptocurrency price updates' },
@@ -15,6 +19,7 @@ export default function FeaturesSection() {
   return (
     <ParallaxSection className='h-screen flex items-center justify-center relative overflow-hidden w-full'>
       <div
+        ref={revealRef}
         style={{
           backgroundColor: theme.bgColor,
           position: 'absolute',
@@ -25,7 +30,7 @@ export default function FeaturesSection() {
       >
         <FadeIn>
           <h2 className='text-4xl font-bold mb-12 text-center' style={{ color: theme.textColor }}>
-            Features
+            {isRevealed && <TypingEffect text='Features' />}
           </h2>
         </FadeIn>
         <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>

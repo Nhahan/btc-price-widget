@@ -6,7 +6,7 @@ import { generateFakeCoinData, getCoinIconUrl } from '@/utils/utils';
 import Image from 'next/image';
 import TypingTitle from '@/component/TypingTitle';
 import { getValidatedCoin, getValidatedDays, getValidatedShowIcon, getValidatedTheme } from '@/utils/validation';
-import { ChartComponent } from '@/component/ChartComponent';
+import ChartComponent from '@/component/ChartComponent';
 import { themes } from '@/types/theme';
 import { CoinDataPoint } from '@/types/types';
 

@@ -9,7 +9,7 @@ type Props = {
   options: ChartOptions;
 };
 
-export function ChartComponent({ data, coinSymbol, days, options }: Props) {
+export default function ChartComponent({ data, coinSymbol, days, options }: Props) {
   const { width, height, bgColor, lineColor, textColor, pointColor, showIcon } = options;
   const padding = { top: 50, right: 37, bottom: 35, left: 57 };
   const chartWidth = width - padding.left - padding.right;

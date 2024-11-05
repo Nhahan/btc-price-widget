@@ -4,7 +4,7 @@ type Props = {
   title: string;
 };
 
-function TypingTitle({ title }: Props) {
+export default function TypingTitle({ title }: Props) {
   const [displayedTitle, setDisplayedTitle] = useState('');
   const [showCursor, setShowCursor] = useState(true);
 
@@ -31,5 +31,3 @@ function TypingTitle({ title }: Props) {
     </h1>
   );
 }
-
-export default TypingTitle;

@@ -11,7 +11,6 @@ export default function DemoSection() {
   const [copied, setCopied] = useState(false);
   const theme = themes['default'];
   const markdownCode = `![Crypto Chart](https://btc-price-widget.vercel.app/api/charts)`;
-
   const { isRevealed, revealRef } = useRevealOnScroll();
 
   const handleCopy = () => {

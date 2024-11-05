@@ -13,7 +13,7 @@ export default function TypingEffect({ text }: Props) {
       setShowCursor(true);
       for (let i = 0; i < text.length; i++) {
         setDisplayedTitle(text.slice(0, i + 1));
-        const delay = Math.floor(Math.random() * 150) + 50;
+        const delay = Math.floor(Math.random() * 150) + 100;
         await new Promise((resolve) => setTimeout(resolve, delay));
       }
       setShowCursor(false);

@@ -6,11 +6,10 @@ import useRevealOnScroll from '@/hook/useRevealOnScroll';
 
 export default function FeaturesSection() {
   const theme = themes['default'];
-
   const { isRevealed, revealRef } = useRevealOnScroll();
 
   const features = [
-    { title: 'Real-time Data', description: 'Live cryptocurrency price updates' },
+    { title: 'Updated Data', description: 'Timely cryptocurrency price updates' },
     { title: 'Customizable', description: 'Multiple themes and display options' },
     { title: 'Easy Integration', description: 'Simple markdown integration for GitHub' },
     { title: 'Multiple Coins', description: 'Support for various cryptocurrencies' },

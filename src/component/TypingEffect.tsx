@@ -1,33 +1,36 @@
 import { useEffect, useState } from 'react';
 
 type Props = {
-  title: string;
+  text: string;
 };
 
-export default function TypingTitle({ title }: Props) {
+export default function TypingEffect({ text }: Props) {
   const [displayedTitle, setDisplayedTitle] = useState('');
   const [showCursor, setShowCursor] = useState(true);
 
   useEffect(() => {
     const typeTitle = async () => {
       setShowCursor(true);
-      for (let i = 0; i < title.length; i++) {
-        setDisplayedTitle((prev) => prev + title.charAt(i));
+      for (let i = 0; i < text.length; i++) {
+        setDisplayedTitle(text.slice(0, i + 1));
         const delay = Math.floor(Math.random() * 150) + 50;
         await new Promise((resolve) => setTimeout(resolve, delay));
       }
       setShowCursor(false);
     };
 
-    typeTitle().then(() => setShowCursor(false));
+    typeTitle();
 
-    return () => {};
-  }, [title]);
+    return () => {
+      setDisplayedTitle('');
+      setShowCursor(true);
+    };
+  }, [text]);
 
   return (
-    <h1 className='text-3xl font-bold inline-block whitespace-nowrap'>
+    <span className='text-3xl font-bold inline-block whitespace-nowrap'>
       {displayedTitle}
       <span className={`border-r-2 border-current animate-blink ${showCursor ? 'opacity-100' : 'opacity-0'}`}></span>
-    </h1>
+    </span>
   );
 }

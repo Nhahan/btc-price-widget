@@ -59,7 +59,7 @@ export const generateChart = (
           .join('')
       : '';
 
-  const numLabels = Math.min(7, Math.max(4, Math.floor(data.length / 10) + 4));
+  const numLabels = Math.max(2, Math.floor(width / 100));
   const labelIndices = Array.from({ length: numLabels }, (_, idx) =>
     Math.round((idx / (numLabels - 1 || 1)) * (data.length - 1)),
   );
@@ -100,17 +100,16 @@ export const generateChart = (
 
   const lastPrice = data[data.length - 1].price;
   const lastPoint = pointsArray[pointsArray.length - 1];
-  const secondLastPoint = pointsArray[pointsArray.length - 2];
+  const secondLastPoint = pointsArray[data.length - 2];
 
-  // 마지막 값이 차트 하단 근처에 위치할 경우 labelPaddingY 조정
-  const minYThreshold = height - padding.bottom - 10; // 최소 y 위치로서 차트 하단 패딩 기준 값
-  const isLastPointLow = lastPoint.y > minYThreshold; // 마지막 값이 차트 하단에 너무 가까운지 확인
+  const minYThreshold = height - padding.bottom - 10;
+  const isLastPointLow = lastPoint.y > minYThreshold;
 
   const labelPaddingX = -24;
   let labelPaddingY = secondLastPoint.y < lastPoint.y ? 20 : -20;
 
   if (isLastPointLow && lastPoint.y >= secondLastPoint.y) {
-    labelPaddingY = -5; // 날짜 텍스트와 겹치는 경우 상단으로 5 만큼 이동
+    labelPaddingY = -5;
   }
 
   const lastPriceX = Math.min(lastPoint.x + labelPaddingX, width - padding.right);

@@ -49,6 +49,12 @@ export default function ChartComponent({ data, coinSymbol, days, options }: Prop
 
   const titleText = `${getCoinName(coinSymbol)} Price Chart (${days} Days)`;
 
+  // **New Code for Calculating Label Indices**
+  const numLabels = Math.max(2, Math.floor(width / 100));
+  const labelIndices = Array.from({ length: numLabels }, (_, i) =>
+    Math.round((i * (data.length - 1)) / (numLabels - 1)),
+  );
+
   return (
     <svg xmlns='http://www.w3.org/2000/svg' width={width} height={height}>
       <rect x='0' y='0' width='100%' height='100%' fill={bgColor} rx='4.5' />
@@ -81,14 +87,19 @@ export default function ChartComponent({ data, coinSymbol, days, options }: Prop
           </circle>
         ))}
 
-      {/* X-axis Labels */}
-      {pointsArray
-        .filter((_, idx) => idx % Math.max(1, Math.floor(data.length / 7)) === 0)
-        .map((p, idx) => (
-          <text key={idx} x={p.x} y={height - padding.bottom + 20} textAnchor='middle' fill={textColor} fontSize='12'>
-            {data[idx].date}
-          </text>
-        ))}
+      {/* **Updated X-axis Labels** */}
+      {labelIndices.map((idx) => (
+        <text
+          key={idx}
+          x={pointsArray[idx].x}
+          y={height - padding.bottom + 20}
+          textAnchor='middle'
+          fill={textColor}
+          fontSize='12'
+        >
+          {data[idx].date}
+        </text>
+      ))}
 
       {/* Y-axis Labels */}
       {[minPrice, (minPrice + maxPrice) / 2, maxPrice].map((price, idx) => (

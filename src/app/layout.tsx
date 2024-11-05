@@ -5,7 +5,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang='en'>
       <head>
-        <title>Cryptocurrency Chart</title>
+        <title>Crypto Charts Widget</title>
       </head>
       <body>
         <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>

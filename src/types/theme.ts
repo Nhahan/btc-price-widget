@@ -1,4 +1,4 @@
-export const themes = {
+export const themes: Record<string, Theme> = {
   default: {
     bgColor: '#0d1117',
     lineColor: '#58a6ff',
@@ -96,16 +96,16 @@ export const themes = {
     pointColor: '#62727b',
   },
   spring: {
-    bgColor: '#f0f9e8', // 부드럽고 밝은 민트색 배경, 봄의 신선함을 표현
-    lineColor: '#66cc99', // 연한 초록색, 새싹과 풀이 자라는 느낌
-    textColor: '#38755b', // 약간 어두운 녹색, 자연스러운 봄 느낌
-    pointColor: '#ffb3ba', // 밝은 핑크색으로 꽃봉오리 포인트
+    bgColor: '#f0f9e8',
+    lineColor: '#66cc99',
+    textColor: '#38755b',
+    pointColor: '#ffb3ba',
   },
   summer: {
-    bgColor: '#e0f7fa', // 시원한 파스텔 블루, 여름의 청량한 하늘 느낌
-    lineColor: '#0288d1', // 깊고 시원한 파란색, 바다와 하늘을 표현
-    textColor: '#01579b', // 진한 남색으로 대비를 주어 시원한 느낌
-    pointColor: '#ffab40', // 밝은 오렌지색으로 햇살을 포인트로 표현
+    bgColor: '#e0f7fa',
+    lineColor: '#0288d1',
+    textColor: '#01579b',
+    pointColor: '#ffab40',
   },
 
   autumn: {
@@ -115,11 +115,18 @@ export const themes = {
     pointColor: '#ff4500',
   },
   winter: {
-    bgColor: '#0a1a2f', // 어두운 남청색 배경으로 차가운 겨울밤의 느낌
-    lineColor: '#5dade2', // 차가운 밝은 청록색으로 얼음의 느낌을 표현
-    textColor: '#c1d9ff', // 차가운 하늘색으로 눈과 얼음을 연상시키는 텍스트 색상
-    pointColor: '#a0c4ff', // 흐릿한 푸른색 포인트로 얼어붙은 물방울 느낌
+    bgColor: '#0a1a2f',
+    lineColor: '#5dade2',
+    textColor: '#c1d9ff',
+    pointColor: '#a0c4ff',
   },
 };
+
+export interface Theme {
+  bgColor: string;
+  lineColor: string;
+  textColor: string;
+  pointColor: string;
+}
 
 export type ThemeName = keyof typeof themes;

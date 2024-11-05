@@ -40,7 +40,7 @@ export function ChartComponent({ data, coinSymbol, days, options }: Props) {
   const minYThreshold = height - padding.bottom - 10;
   const isLastPointLow = lastPoint.y > minYThreshold;
 
-  const labelPaddingX = -24;
+  const labelPaddingX = -30;
   let labelPaddingY = secondLastPoint.y < lastPoint.y ? 20 : -20;
 
   if (isLastPointLow && lastPoint.y >= secondLastPoint.y) {

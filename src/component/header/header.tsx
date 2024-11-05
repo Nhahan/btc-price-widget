@@ -21,7 +21,7 @@ export default function Header() {
           Crypto Chart Widget
         </div>
         <motion.a
-          href='https://github.com'
+          href='https://github.com/Nhahan/btc-price-widget'
           target='_blank'
           rel='noopener noreferrer'
           className='flex items-center space-x-2'

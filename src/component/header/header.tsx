@@ -1,22 +1,10 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useEffect, useState } from 'react';
 import { Github } from 'lucide-react';
 import { themes } from '@/types/theme';
 
 export default function Header() {
   const { scrollY } = useScroll();
-  const [scrollLimit, setScrollLimit] = useState(window.innerHeight * 0.75);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setScrollLimit(window.innerHeight * 0.75);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  const opacity = useTransform(scrollY, [0, scrollLimit], [1, 0]);
+  const opacity = useTransform(scrollY, [0, 600], [1, 0]);
   const pointerEvents = useTransform(opacity, (value) => (value <= 0.1 ? 'none' : 'auto'));
   const theme = themes['default'];
 

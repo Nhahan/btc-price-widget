@@ -100,7 +100,7 @@ export function ChartComponent({ data, coinSymbol, days, options }: Props) {
             fill={textColor}
             fontSize='12'
           >
-            ${price.toFixed(1)}k
+            ${(price / 1000).toFixed(1)}k
           </text>
           <line
             x1={padding.left}

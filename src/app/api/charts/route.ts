@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { generateChart } from '@/lib/generateChart';
 import { fetchCoinData } from '@/lib/fetchCoinData';

@@ -17,16 +17,7 @@ export default function FeaturesSection() {
 
   return (
     <ParallaxSection className='h-screen flex items-center justify-center relative overflow-hidden w-full'>
-      <div
-        ref={revealRef}
-        style={{
-          backgroundColor: theme.bgColor,
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-        }}
-      >
+      <div ref={revealRef}>
         <FadeIn>
           <h2 className='text-4xl font-bold mb-12 text-center' style={{ color: theme.textColor }}>
             {isRevealed && <TypingEffect text='Features' />}

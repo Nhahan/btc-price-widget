@@ -25,7 +25,7 @@ const themes = [
 ];
 const coins = ['', 'btc', 'eth'];
 
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
   const cronSecret = process.env.CRON_SECRET;
   const authorizationHeader = request.headers.get('Authorization');
 

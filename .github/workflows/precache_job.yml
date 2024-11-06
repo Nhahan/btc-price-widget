@@ -1,0 +1,17 @@
+name: Precache API Cron Job
+
+on:
+  schedule:
+    - cron: '*/30 * * * *' # 30minutes interval
+
+jobs:
+  precache:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Call Precache API
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          curl -X POST https://btc-price-widget.vercel.app/api/charts/precache \
+          -H "Authorization: Bearer $CRON_SECRET"

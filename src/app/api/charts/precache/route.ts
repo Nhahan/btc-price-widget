@@ -34,18 +34,21 @@ export async function POST(request: NextRequest) {
   }
 
   const baseURL = 'https://btc-price-widget.vercel.app/api/charts/precache';
+  const logMessages = [];
 
   for (const theme of themes) {
     for (const coin of coins) {
       const url = `${baseURL}${coin ? `?coin=${coin}` : ''}${theme ? `&theme=${theme}` : ''}`;
       try {
-        console.log(`Precaching ${url}`);
         await fetch(url);
+        logMessages.push(`Precaching succeeded: ${url}`);
       } catch (error) {
-        console.error(`Failed to precache ${url}`, error);
+        logMessages.push(`Failed to precache: ${url} - Error: ${error}`);
       }
     }
   }
+
+  console.log(logMessages.join('\n'));
 
   return NextResponse.json({ message: 'Precaching completed' });
 }

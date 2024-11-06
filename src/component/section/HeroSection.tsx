@@ -22,8 +22,8 @@ export default function HeroSection() {
               <span
                 className='animate-shine bg-gradient-to-r from-transparent via-white to-transparent bg-clip-text text-transparent'
                 style={{
-                  backgroundImage: `linear-gradient(90deg, ${theme.textColor} 20%, ${theme.lineColor} 60%, ${theme.textColor} 20%)`,
-                  backgroundSize: '200% 100%',
+                  backgroundImage: `linear-gradient(135deg, ${theme.textColor} 0%, ${theme.lineColor} 20%, ${theme.textColor} 10%)`,
+                  backgroundSize: '150% 100%',
                   color: theme.textColor,
                 }}
               >

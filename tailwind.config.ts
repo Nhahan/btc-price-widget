@@ -22,15 +22,15 @@ const config: Config = {
           '50%': { 'border-color': 'transparent' },
         },
         shine: {
-          '0%': { backgroundPosition: '100% 0', color: 'currentColor' },
+          '0%': { backgroundPosition: '200% 0', color: 'currentColor' },
           '50%': { color: 'transparent' },
-          '100%': { backgroundPosition: '-100% 0', color: 'currentColor' },
+          '100%': { backgroundPosition: '-200% 0', color: 'currentColor' },
         },
       },
       animation: {
         'fade-in': 'fade-in 0.75s ease-in-out forwards',
         blink: 'blink 0.7s step-end infinite',
-        shine: 'shine 0.75s ease-in-out 1s forwards',
+        shine: 'shine 1s ease-in-out 1s forwards',
       },
     },
   },

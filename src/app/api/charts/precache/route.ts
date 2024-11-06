@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 const themes = [
   '',
@@ -25,7 +25,14 @@ const themes = [
 ];
 const coins = ['', 'btc', 'eth'];
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const cronSecret = process.env.CRON_SECRET;
+  const authorizationHeader = request.headers.get('Authorization');
+
+  if (authorizationHeader !== `Bearer ${cronSecret}`) {
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+  }
+
   const baseURL = 'https://btc-price-widget.vercel.app/api/charts/precache';
 
   for (const theme of themes) {

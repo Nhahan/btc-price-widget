@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
-  const baseURL = 'https://btc-price-widget.vercel.app/api/charts/precache';
+  const baseURL = 'https://btc-price-widget.vercel.app/api/charts';
   const logMessages = [];
 
   for (const theme of themes) {

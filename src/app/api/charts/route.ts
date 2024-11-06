@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
       status: 200,
       headers: {
         'Content-Type': 'image/svg+xml',
-        'Cache-Control': `public, s-maxage=${REVALIDATE_INTERVAL}, stale-while-revalidate=28800`,
+        'Cache-Control': `public, s-maxage=${REVALIDATE_INTERVAL}, stale-while-revalidate=${REVALIDATE_INTERVAL}`,
       },
     });
   } catch (error) {

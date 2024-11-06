@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/precache",
-      "schedule": "0 * * * *"
+      "schedule": "*/20 * * * *"
     }
   ]
 }

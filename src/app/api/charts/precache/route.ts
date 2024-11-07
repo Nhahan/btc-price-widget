@@ -35,23 +35,26 @@ export async function POST(request: NextRequest) {
 
   const baseURL = 'https://btc-price-widget.vercel.app/api/charts';
   const logMessages: string[] = [];
+  const startTime = Date.now(); // processing start time
 
   const requests = themes.flatMap((theme) =>
-    coins.map((coin) => {
+    coins.map(async (coin) => {
       const url = `${baseURL}${coin ? `?coin=${coin}` : ''}${theme ? `&theme=${theme}` : ''}`;
-      return fetch(url)
-        .then(() => {
-          logMessages.push(`Precaching succeeded: ${url}`);
-        })
-        .catch((error) => {
-          logMessages.push(`Failed to precache: ${url} - Error: ${error}`);
-        });
+      try {
+        await fetch(url);
+        logMessages.push(`Precaching succeeded: ${url}`);
+      } catch (error) {
+        logMessages.push(`Failed to precache: ${url} - Error: ${error}`);
+      }
     }),
   );
 
   await Promise.all(requests);
 
+  const totalTime = (Date.now() - startTime) / 1000;
+  logMessages.unshift(`Total precaching time: ${totalTime} seconds`);
+
   console.log(logMessages.join('\n'));
 
-  return NextResponse.json({ message: 'Precaching completed' });
+  return NextResponse.json({ message: 'Precaching completed', totalTime: `${totalTime} seconds` });
 }

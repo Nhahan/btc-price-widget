@@ -1,12 +1,12 @@
-export const runtime = 'edge';
-
+import { REVALIDATE_INTERVAL } from '@/const/const';
 import { NextRequest, NextResponse } from 'next/server';
 import { generateChart } from '@/lib/generateChart';
 import { fetchCoinData } from '@/lib/fetchCoinData';
-import { REVALIDATE_INTERVAL } from '@/lib/config';
 import { CoinSymbol } from '@/types/types';
 import { Theme, themes } from '@/types/theme';
 import { getValidatedCoin, getValidatedDays, getValidatedShowIcon, getValidatedTheme } from '@/utils/validation';
+
+export const runtime = 'edge';
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   const { searchParams } = new URL(request.url);

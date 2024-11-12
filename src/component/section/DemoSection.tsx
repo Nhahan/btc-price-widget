@@ -24,7 +24,7 @@ export default function DemoSection() {
       <div ref={revealRef}>
         <FadeIn>
           <h2 className='text-4xl font-bold mb-12 text-center' style={{ color: theme.textColor }}>
-            {isRevealed && <TypingEffect text='Live Demo' />}
+            {isRevealed && <TypingEffect text='Widget Demo' />}
           </h2>
         </FadeIn>
         <FadeIn>

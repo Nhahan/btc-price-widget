@@ -1,3 +1,5 @@
+import { COINS } from '@/const/const';
+
 export interface CoinDataPoint {
   date: string;
   price: number;
@@ -19,8 +21,8 @@ export interface CoinAPI {
   fetchFunction: (coinId: CoinId, days: number) => Promise<CoinDataPoint[]>;
 }
 
-export type CoinSymbol = 'btc' | 'eth';
-export type CoinId = 'bitcoin' | 'ethereum';
+export type CoinSymbol = keyof typeof COINS;
+export type CoinId = (typeof COINS)[CoinSymbol]['id'];
 
 export interface ChartOptions {
   width: number;

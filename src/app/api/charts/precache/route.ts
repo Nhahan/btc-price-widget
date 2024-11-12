@@ -1,4 +1,3 @@
-// const.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { THEMES, VALID_COINS } from '@/const/const';
 
@@ -18,10 +17,10 @@ export async function POST(request: NextRequest) {
 
   const baseURL = 'https://btc-price-widget.vercel.app/api/charts';
   const logMessages: string[] = [];
-  const startTime = Date.now(); // Start time for processing
+  const startTime = Date.now();
 
   // Generate all URL combination caches
-  const requests = THEMES.flatMap((theme) =>
+  const requests = ['', ...THEMES].flatMap((theme) =>
     ['', ...VALID_COINS].map(async (coin) => {
       const url = `${baseURL}${coin ? `?coin=${coin}` : ''}${theme ? `&theme=${theme}` : ''}`;
       try {

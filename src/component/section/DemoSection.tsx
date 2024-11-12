@@ -22,8 +22,8 @@ export default function DemoSection() {
   const [selectedTheme, setSelectedTheme] = useState<ThemeName>('default');
 
   // Fixed width and height
-  const width: number = 700;
-  const height: number = 350;
+  const width: number = 640;
+  const height: number = width / 2;
 
   // Generate fake data based on days
   const [data, setData] = useState<CoinDataPoint[]>([]);
@@ -75,21 +75,17 @@ export default function DemoSection() {
   };
 
   return (
-    <ParallaxSection className='min-h-screen flex items-center justify-center overflow-hidden w-full'>
-      <div ref={revealRef} className='w-full'>
+    <ParallaxSection className='min-h-screen flex justify-center items-center overflow-hidden'>
+      <div ref={revealRef} className='w-full max-w-[720px] mx-auto px-4'>
         <FadeIn>
           <h2 className='text-4xl font-bold mb-12 text-center' style={{ color: currentTheme.textColor }}>
             {isRevealed && <TypingEffect text='Customize Your Crypto Chart Widget' />}
           </h2>
         </FadeIn>
         <div className='flex flex-col gap-8'>
-          {/* Chart Preview */}
           <FadeIn>
             <div className='w-full bg-[#161b22] p-6 rounded-lg'>
-              <h3 className='text-2xl font-bold mb-4' style={{ color: currentTheme.textColor }}>
-                Chart Preview
-              </h3>
-              <ChartComponent data={data} coinSymbol={coinSymbol} days={days} options={options} />
+              {data.length > 0 && <ChartComponent data={data} coinSymbol={coinSymbol} days={days} options={options} />}
             </div>
           </FadeIn>
 
@@ -99,7 +95,7 @@ export default function DemoSection() {
               <h3 className='text-2xl font-bold mb-4' style={{ color: currentTheme.textColor }}>
                 Customization Options
               </h3>
-              <form className='space-y-4'>
+              <form className='grid grid-cols-2 gap-4'>
                 {/* Days Selection */}
                 <div>
                   <label
@@ -117,7 +113,7 @@ export default function DemoSection() {
                     max='31'
                     value={days}
                     onChange={handleOptionChange}
-                    className='w-full p-2 bg-gray-800 text-white rounded'
+                    className='w-full h-[36px] p-2 bg-gray-800 text-white rounded'
                   />
                 </div>
 
@@ -135,7 +131,7 @@ export default function DemoSection() {
                     id='selectedTheme'
                     value={selectedTheme}
                     onChange={handleOptionChange}
-                    className='w-full p-2 bg-gray-800 text-white rounded'
+                    className='w-full h-[36px] p-2 bg-gray-800 text-white rounded'
                   >
                     {Object.keys(themes).map((themeName) => (
                       <option key={themeName} value={themeName}>

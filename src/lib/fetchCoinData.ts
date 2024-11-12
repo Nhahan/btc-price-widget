@@ -17,7 +17,7 @@ const MAX_DAYS = 31;
  * @returns Array of objects containing date and price
  */
 export const fetchCoinData = async (coinSymbol: CoinSymbol): Promise<CoinDataPoint[]> => {
-  const coinId: CoinId = COIN_MAP[coinSymbol] || 'bitcoin';
+  const coinId: CoinId = COIN_MAP[coinSymbol];
   const dataFetchers: CoinAPI[] = [
     { coinId, fetchFunction: fetchFromCoinGecko },
     { coinId, fetchFunction: fetchFromCoinPaprika },
@@ -25,6 +25,7 @@ export const fetchCoinData = async (coinSymbol: CoinSymbol): Promise<CoinDataPoi
   ];
 
   for (const { fetchFunction, coinId } of dataFetchers) {
+    console.log(`Attempting to fetch data for ${coinId} using ${fetchFunction.name}`);
     try {
       const data: CoinDataPoint[] = await unstableCache(() => fetchFunction(coinId, MAX_DAYS), ['coinData', coinId], {
         revalidate: REVALIDATE_INTERVAL,
@@ -34,7 +35,7 @@ export const fetchCoinData = async (coinSymbol: CoinSymbol): Promise<CoinDataPoi
         return data.slice(-MAX_DAYS); // Ensure the correct number of days
       }
     } catch (error) {
-      console.error(`Error fetching data for ${coinId}:`, error);
+      console.warn(`Error fetching data for ${coinId} using ${fetchFunction.name}:`, error);
     }
   }
 

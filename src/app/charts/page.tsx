@@ -21,7 +21,7 @@ export default function Pages() {
           setDisplayedCharts((prev) => [...prev, { theme, svg }]);
 
           if (i !== 0) {
-            await new Promise((resolve) => setTimeout(resolve, 275));
+            await new Promise((resolve) => setTimeout(resolve, 333));
           }
         }
       }

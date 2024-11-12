@@ -1,14 +1,12 @@
 import { CoinDataPoint, CoinPaprikaData } from '@/types/types';
 import { getCurrentDate, getCurrentTimestamp } from '@/utils/utils';
-import { REVALIDATE_INTERVAL } from '@/lib/config';
-
-const revalidate = REVALIDATE_INTERVAL;
+import { REVALIDATE_INTERVAL } from '@/const/const';
 
 export const fetchFromCoinGecko = async (coinId: string, days: number): Promise<CoinDataPoint[]> => {
   const response = await fetch(
     `${process.env.COINGECKO_API_URL}/coins/${coinId}/market_chart?vs_currency=usd&days=${days}&interval=daily`,
     {
-      next: { revalidate },
+      next: { revalidate: REVALIDATE_INTERVAL },
     },
   );
 
@@ -31,7 +29,7 @@ export const fetchFromCoinPaprika = async (coinId: string, days: number): Promis
       days,
     )}&end=${getCurrentDate()}`,
     {
-      next: { revalidate },
+      next: { revalidate: REVALIDATE_INTERVAL },
     },
   );
 
@@ -52,7 +50,7 @@ export const fetchFromCoinCap = async (coinId: string, days: number): Promise<Co
       days,
     )}&end=${getCurrentTimestamp()}`,
     {
-      next: { revalidate },
+      next: { revalidate: REVALIDATE_INTERVAL },
     },
   );
 

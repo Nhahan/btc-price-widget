@@ -1,11 +1,5 @@
 import { ThemeName, themes } from '@/types/theme';
-
-export const VALID_COINS = ['btc', 'eth'];
-export const MIN_DAYS = 7;
-export const MAX_DAYS = 31;
-export const DEFAULT_COIN = 'btc';
-export const DEFAULT_DAYS = 30;
-export const DEFAULT_THEME: ThemeName = 'default';
+import { DEFAULT_COIN, DEFAULT_DAYS, DEFAULT_THEME, MAX_DAYS, MIN_DAYS, VALID_COINS } from '@/const/const';
 
 // Coin validation
 export function getValidatedCoin(coinParam?: string | null): string {

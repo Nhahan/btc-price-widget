@@ -1,19 +1,12 @@
 import { unstableCache } from '@/utils/cacheUtils';
 import { CoinAPI, CoinDataPoint, CoinId, CoinSymbol } from '@/types/types';
 import { fetchFromCoinCap, fetchFromCoinGecko, fetchFromCoinPaprika } from '@/api/coin';
-import { REVALIDATE_INTERVAL } from '@/lib/config';
-
-const COIN_MAP: Record<CoinSymbol, CoinId> = {
-  btc: 'bitcoin',
-  eth: 'ethereum',
-};
-
-const MAX_DAYS = 31;
+import { COIN_MAP, MAX_DAYS, REVALIDATE_INTERVAL } from '@/const/const';
 
 /**
  * Fetches daily price data for a specified coin from multiple APIs.
  * Always fetches 31 days of data to enable caching.
- * @param coinSymbol Coin ID used in APIs (e.g., 'bitcoin' or 'ethereum')
+ * @param coinSymbol Coin symbol (e.g., 'btc' or 'eth')
  * @returns Array of objects containing date and price
  */
 export const fetchCoinData = async (coinSymbol: CoinSymbol): Promise<CoinDataPoint[]> => {

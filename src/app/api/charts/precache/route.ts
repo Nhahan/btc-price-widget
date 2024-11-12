@@ -1,30 +1,13 @@
+// const.ts
 import { NextRequest, NextResponse } from 'next/server';
+import { THEMES, VALID_COINS } from '@/const/const';
 
-const themes = [
-  '',
-  'default',
-  'sunset',
-  'forest',
-  'ocean',
-  'pastel',
-  'noir',
-  'neon',
-  'monochrome',
-  'midnight',
-  'sunrise',
-  'retro',
-  'cyberpunk',
-  'grayscale',
-  'candy',
-  'light',
-  'dark',
-  'spring',
-  'summer',
-  'autumn',
-  'winter',
-];
-const coins = ['', 'btc', 'eth'];
-
+/**
+ * Handles POST requests to precache chart data for all combinations of coins and themes.
+ * Ensures that only authorized requests with the correct cron secret are processed.
+ * @param request NextRequest object containing the request details
+ * @returns NextResponse indicating the result of the precaching operation
+ */
 export async function POST(request: NextRequest) {
   const cronSecret = process.env.CRON_SECRET;
   const authorizationHeader = request.headers.get('Authorization');
@@ -35,10 +18,11 @@ export async function POST(request: NextRequest) {
 
   const baseURL = 'https://btc-price-widget.vercel.app/api/charts';
   const logMessages: string[] = [];
-  const startTime = Date.now(); // processing start time
+  const startTime = Date.now(); // Start time for processing
 
-  const requests = themes.flatMap((theme) =>
-    coins.map(async (coin) => {
+  // Generate all URL combination caches
+  const requests = THEMES.flatMap((theme) =>
+    ['', ...VALID_COINS].map(async (coin) => {
       const url = `${baseURL}${coin ? `?coin=${coin}` : ''}${theme ? `&theme=${theme}` : ''}`;
       try {
         await fetch(url);
@@ -49,6 +33,7 @@ export async function POST(request: NextRequest) {
     }),
   );
 
+  // Execute all fetch requests concurrently
   await Promise.all(requests);
 
   const totalTime = (Date.now() - startTime) / 1000;

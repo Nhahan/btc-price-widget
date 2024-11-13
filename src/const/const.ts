@@ -18,7 +18,7 @@ export const COIN_MAP: Record<CoinSymbol, CoinId> = Object.fromEntries(
 
 export const MIN_DAYS = 7;
 export const MAX_DAYS = 31;
-export const DEFAULT_COIN = 'btc';
+export const DEFAULT_COIN_SYMBOL = 'btc' as CoinSymbol;
 export const DEFAULT_DAYS = 30;
 export const DEFAULT_THEME: ThemeName = 'default';
 

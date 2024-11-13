@@ -1,9 +1,11 @@
 import { ThemeName, themes } from '@/types/theme';
-import { DEFAULT_COIN, DEFAULT_DAYS, DEFAULT_THEME, MAX_DAYS, MIN_DAYS, VALID_COINS } from '@/const/const';
+import { DEFAULT_COIN_SYMBOL, DEFAULT_DAYS, DEFAULT_THEME, MAX_DAYS, MIN_DAYS, VALID_COINS } from '@/const/const';
+import { CoinSymbol } from '@/types/types'; // Coin validation
 
 // Coin validation
-export function getValidatedCoin(coinParam?: string | null): string {
-  return VALID_COINS.includes(coinParam?.toLowerCase() || '') ? coinParam!.toLowerCase() : DEFAULT_COIN;
+export function getValidatedCoin(coinParam?: string | null): CoinSymbol {
+  const normalizedParam = (coinParam ? coinParam.toLowerCase() : DEFAULT_COIN_SYMBOL) as CoinSymbol;
+  return VALID_COINS.includes(normalizedParam) ? normalizedParam : DEFAULT_COIN_SYMBOL;
 }
 
 // Days validation

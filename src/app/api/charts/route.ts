@@ -53,7 +53,7 @@ function getValidatedParams(searchParams: URLSearchParams): {
   height: number;
   showIcon: boolean;
 } {
-  const coinSymbol = getValidatedCoin(searchParams.get('coin')) as CoinSymbol;
+  const coinSymbol = getValidatedCoin(searchParams.get('coin'));
   const days = getValidatedDays(searchParams.get('days'));
   const themeParam = getValidatedTheme(searchParams.get('theme'));
   const theme = themes[themeParam];

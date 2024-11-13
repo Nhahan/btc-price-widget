@@ -7,6 +7,7 @@ import { themes } from '@/types/theme';
 import { generateFakeCoinData } from '@/utils/utils';
 import ChartComponent from '@/component/ChartComponent';
 import FadeIn from '@/component/motion/FadeIn';
+import { COINS } from '@/const/const';
 
 export default function ChartSection() {
   const searchParams = useSearchParams();
@@ -22,6 +23,7 @@ export default function ChartSection() {
     height: 300,
     ...themes[themeParam],
     showIcon,
+    toFixed: COINS[coin].toFixed,
   };
 
   useEffect(() => {

@@ -1,5 +1,6 @@
-import { ChartOptions, CoinDataPoint } from '@/types/types';
-import { getCoinIconUrl, getCoinName } from '@/utils/utils';
+import { ChartOptions, CoinDataPoint, CoinSymbol } from '@/types/types';
+import { getCoinIconUrl } from '@/utils/utils';
+import { COINS } from '@/const/const';
 
 type Props = {
   data: CoinDataPoint[];
@@ -47,7 +48,7 @@ export default function ChartComponent({ data, coinSymbol, days, options }: Prop
     labelPaddingY = -5;
   }
 
-  const titleText = `${getCoinName(coinSymbol)} Chart (${days} Days)`;
+  const titleText = `${COINS[coinSymbol as CoinSymbol].name} Chart (${days} Days)`;
 
   // **New Code for Calculating Label Indices**
   const numLabels = Math.max(2, Math.floor(width / 100));

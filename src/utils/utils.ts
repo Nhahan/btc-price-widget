@@ -6,14 +6,6 @@ export const getCoinIconUrl = (coin: string): string => {
   return icons[coin] || '';
 };
 
-export const getCoinName = (coin: string): string => {
-  const names: { [key: string]: string } = {
-    btc: 'Bitcoin',
-    eth: 'Ethereum',
-  };
-  return names[coin] || '';
-};
-
 export const getCurrentTimestamp = (): number => {
   return Date.now();
 };

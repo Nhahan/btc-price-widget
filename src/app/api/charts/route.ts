@@ -1,8 +1,8 @@
-import { REVALIDATE_INTERVAL } from '@/const/const';
+import { COINS, REVALIDATE_INTERVAL } from '@/const/const';
 import { NextRequest, NextResponse } from 'next/server';
 import { generateChart } from '@/lib/generateChart';
 import { fetchCoinData } from '@/lib/fetchCoinData';
-import { CoinSymbol } from '@/types/types';
+import { CoinDataPoint, CoinSymbol } from '@/types/types';
 import { Theme, themes } from '@/types/theme';
 import { getValidatedCoin, getValidatedDays, getValidatedShowIcon, getValidatedTheme } from '@/utils/validation';
 
@@ -13,7 +13,11 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   const { coinSymbol, days, theme, width, height, showIcon } = getValidatedParams(searchParams);
 
   try {
-    const coinData = await fetchCoinData(coinSymbol);
+    const coinData: CoinDataPoint[] = (await fetchCoinData(coinSymbol)).map(({ date, price }) => ({
+      date,
+      price: +price.toFixed(COINS[coinSymbol].toFixed),
+    }));
+    console.log(coinData);
     if (coinData.length > 0) {
       const slicedData = coinData.slice(-days);
       const chart = generateChart(slicedData, coinSymbol, days, {
@@ -21,6 +25,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         height,
         ...theme,
         showIcon,
+        toFixed: COINS[coinSymbol].toFixed,
       });
 
       return new NextResponse(chart, {

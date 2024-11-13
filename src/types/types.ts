@@ -32,5 +32,5 @@ export interface ChartOptions {
   textColor: string;
   pointColor: string;
   showIcon: boolean;
-  toFixed?: number;
+  toFixed: number;
 }

@@ -5,6 +5,7 @@ import SvgChartComponent from '@/component/SvgChartComponent';
 import { ThemeName, themes } from '@/types/theme';
 import { generateChart } from '@/lib/generateChart';
 import { generateFakeCoinData } from '@/utils/utils';
+import { COINS } from '@/const/const';
 
 export default function Pages() {
   const [displayedCharts, setDisplayedCharts] = useState<{ theme: ThemeName; svg: string }[]>([]);
@@ -54,6 +55,7 @@ function createChart() {
       textColor: theme.textColor,
       pointColor: theme.pointColor,
       showIcon: true,
+      toFixed: COINS['btc'].toFixed,
     });
     return { theme: themeName, svg };
   });

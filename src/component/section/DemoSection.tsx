@@ -13,20 +13,13 @@ import { generateFakeCoinData } from '@/utils/utils';
 
 export default function DemoSection() {
   const [copied, setCopied] = useState<boolean>(false);
-
-  // Fixed Coin Symbol to 'btc'
-  const coinSymbol: string = 'btc';
-
-  // State for customization options
   const [days, setDays] = useState<number>(30);
   const [selectedTheme, setSelectedTheme] = useState<ThemeName>('default');
+  const [data, setData] = useState<CoinDataPoint[]>([]);
 
-  // Fixed width and height
   const width: number = 640;
   const height: number = width / 2;
-
-  // Generate fake data based on days
-  const [data, setData] = useState<CoinDataPoint[]>([]);
+  const coinSymbol: string = 'btc';
 
   useEffect(() => {
     const generatedData = generateFakeCoinData(days);
@@ -35,7 +28,6 @@ export default function DemoSection() {
 
   const { isRevealed, revealRef } = useRevealOnScroll();
 
-  // Current Theme
   const currentTheme: Theme = themes[selectedTheme];
 
   const options = {
@@ -48,17 +40,13 @@ export default function DemoSection() {
     showIcon: false, // Removed showCoinIcon, set to false
   };
 
-  // Generate markdown code based on customization options
-  const markdownCode: string = `![Crypto Chart](https://btc-price-widget.vercel.app/api/charts?coin=${coinSymbol}&theme=${selectedTheme})`;
+  const markdownCode: string = `![Chart](https://btc-price-widget.vercel.app/api/charts?coin=${coinSymbol}&theme=${selectedTheme})`;
 
-  // Handle copying markdown code to clipboard
   const handleCopy = () => {
-    navigator.clipboard.writeText(markdownCode);
-    setCopied(true);
+    navigator.clipboard.writeText(markdownCode).then(() => setCopied(true));
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Handle changes in customization options
   const handleOptionChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
@@ -79,7 +67,7 @@ export default function DemoSection() {
       <div ref={revealRef} className='w-full max-w-[720px] mx-auto px-4'>
         <FadeIn>
           <h2 className='text-4xl font-bold mb-12 text-center' style={{ color: currentTheme.textColor }}>
-            {isRevealed && <TypingEffect text='Customize Your Crypto Chart Widget' />}
+            {isRevealed && <TypingEffect text='Widget Demo' />}
           </h2>
         </FadeIn>
         <div className='flex flex-col gap-8'>
@@ -92,9 +80,6 @@ export default function DemoSection() {
           {/* Customization Controls */}
           <FadeIn>
             <div className='w-full bg-[#161b22] p-6 rounded-lg'>
-              <h3 className='text-2xl font-bold mb-4' style={{ color: currentTheme.textColor }}>
-                Customization Options
-              </h3>
               <form className='grid grid-cols-2 gap-4'>
                 {/* Days Selection */}
                 <div>
@@ -148,13 +133,15 @@ export default function DemoSection() {
           <FadeIn>
             <div className='w-full bg-[#161b22] p-6 rounded-lg'>
               <h3 className='text-2xl font-bold mb-4' style={{ color: currentTheme.textColor }}>
-                Markdown Code
+                Add to your README
               </h3>
               <div className='relative bg-gray-800 p-4 rounded-lg border border-gray-700'>
-                <code className='block pb-2 text-sm text-white break-all'>{markdownCode}</code>
+                <code className='block text-sm text-white truncate max-w-full overflow-hidden whitespace-nowrap pr-4'>
+                  {markdownCode}
+                </code>
                 <button
                   onClick={handleCopy}
-                  className='absolute top-2 right-2 p-1 rounded hover:bg-gray-700 transition-colors'
+                  className='absolute top-3 right-2 p-1 rounded hover:bg-gray-700 transition-colors'
                   aria-label='Copy Markdown Code'
                 >
                   {copied ? <CheckCircle2 size={18} /> : <Copy size={18} />}

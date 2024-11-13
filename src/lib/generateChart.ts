@@ -94,7 +94,7 @@ export const generateChart = (
   const coinIconUrl = getCoinIconUrl(coinSymbol);
   const coinName = getCoinName(coinSymbol);
 
-  const titleText = `${coinName} Price Chart (${days} Days)`;
+  const titleText = `${coinName} Chart (${days} Days)`;
   const titleTextLength = titleText.length * 10;
   const titleGroupTransformX = (width - titleTextLength - (showIcon ? 30 : 0)) / 2;
 

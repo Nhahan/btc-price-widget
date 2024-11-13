@@ -47,7 +47,7 @@ export default function ChartComponent({ data, coinSymbol, days, options }: Prop
     labelPaddingY = -5;
   }
 
-  const titleText = `${getCoinName(coinSymbol)} Price Chart (${days} Days)`;
+  const titleText = `${getCoinName(coinSymbol)} Chart (${days} Days)`;
 
   // **New Code for Calculating Label Indices**
   const numLabels = Math.max(2, Math.floor(width / 100));

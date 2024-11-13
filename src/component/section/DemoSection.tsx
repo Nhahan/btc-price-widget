@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { CheckCircle2, Copy } from 'lucide-react';
 import FadeIn from '../motion/FadeIn';
 import { Theme, ThemeName, themes } from '@/types/theme';
@@ -8,23 +8,30 @@ import ParallaxSection from '@/component/motion/ParallaxSection';
 import TypingEffect from '@/component/TypingEffect';
 import useRevealOnScroll from '@/hook/useRevealOnScroll';
 import ChartComponent from '@/component/ChartComponent';
-import { CoinDataPoint } from '@/types/types';
+import { CoinDataPoint, CoinSymbol } from '@/types/types';
 import { generateFakeCoinData } from '@/utils/utils';
+import { COINS, DEFAULT_DAYS, VALID_COINS } from '@/const/const';
 
 export default function DemoSection() {
   const [copied, setCopied] = useState<boolean>(false);
-  const [days, setDays] = useState<number>(30);
   const [selectedTheme, setSelectedTheme] = useState<ThemeName>('default');
+  const [coinSymbol, setCoinSymbol] = useState<CoinSymbol>('btc');
   const [data, setData] = useState<CoinDataPoint[]>([]);
 
   const width: number = 640;
   const height: number = width / 2;
-  const coinSymbol: string = 'btc';
 
   useEffect(() => {
-    const generatedData = generateFakeCoinData(days);
+    const coinSettings = COINS[coinSymbol]; // 현재 선택된 코인 설정 가져오기
+    const generatedData = generateFakeCoinData(
+      DEFAULT_DAYS,
+      coinSettings.basePrice,
+      coinSettings.variation,
+      coinSettings.rate,
+      coinSettings.toFixed,
+    );
     setData(generatedData);
-  }, [days]);
+  }, [coinSymbol]);
 
   const { isRevealed, revealRef } = useRevealOnScroll();
 
@@ -37,7 +44,8 @@ export default function DemoSection() {
     lineColor: currentTheme.lineColor,
     textColor: currentTheme.textColor,
     pointColor: currentTheme.pointColor,
-    showIcon: false, // Removed showCoinIcon, set to false
+    showIcon: true,
+    toFixed: COINS[coinSymbol].toFixed, // 선택된 코인의 toFixed 설정 반영
   };
 
   const markdownCode: string = `![Chart](https://btc-price-widget.vercel.app/api/charts?coin=${coinSymbol}&theme=${selectedTheme})`;
@@ -47,18 +55,13 @@ export default function DemoSection() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleOptionChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleOptionChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
 
-    switch (name) {
-      case 'days':
-        setDays(Number(value));
-        break;
-      case 'selectedTheme':
-        setSelectedTheme(value as ThemeName);
-        break;
-      default:
-        break;
+    if (name === 'selectedTheme') {
+      setSelectedTheme(value as ThemeName);
+    } else if (name === 'coinSymbol') {
+      setCoinSymbol(value as CoinSymbol);
     }
   };
 
@@ -73,7 +76,9 @@ export default function DemoSection() {
         <div className='flex flex-col gap-8'>
           <FadeIn>
             <div className='w-full bg-[#161b22] p-6 rounded-lg'>
-              {data.length > 0 && <ChartComponent data={data} coinSymbol={coinSymbol} days={days} options={options} />}
+              {data.length > 0 && (
+                <ChartComponent data={data} coinSymbol={coinSymbol} days={DEFAULT_DAYS} options={options} />
+              )}
             </div>
           </FadeIn>
 
@@ -81,25 +86,28 @@ export default function DemoSection() {
           <FadeIn>
             <div className='w-full bg-[#161b22] p-6 rounded-lg'>
               <form className='grid grid-cols-2 gap-4'>
-                {/* Days Selection */}
+                {/* Coin Symbol Selection */}
                 <div>
                   <label
-                    htmlFor='days'
+                    htmlFor='coinSymbol'
                     className='block text-sm font-medium mb-1'
                     style={{ color: currentTheme.textColor }}
                   >
-                    Days
+                    Coin
                   </label>
-                  <input
-                    type='number'
-                    name='days'
-                    id='days'
-                    min='14'
-                    max='31'
-                    value={days}
+                  <select
+                    name='coinSymbol'
+                    id='coinSymbol'
+                    value={coinSymbol}
                     onChange={handleOptionChange}
                     className='w-full h-[36px] p-2 bg-gray-800 text-white rounded'
-                  />
+                  >
+                    {VALID_COINS.map((coin) => (
+                      <option key={coin} value={coin}>
+                        {coin.toUpperCase()}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 {/* Theme Selection */}

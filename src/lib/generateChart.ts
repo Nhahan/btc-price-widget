@@ -15,6 +15,7 @@ export const generateChart = (
   const maxPrice = Math.max(...data.map((d) => d.price));
   const minPrice = Math.min(...data.map((d) => d.price));
   const priceRange = maxPrice - minPrice || 1;
+  const toFixed = options.toFixed || 2;
 
   const pointsArray = data.map((d, i) => {
     const x = (i / (data.length - 1 || 1)) * chartWidth + padding.left;
@@ -77,16 +78,17 @@ export const generateChart = (
     })
     .join('');
 
+  // Adjust x position for yLabels based on toFixed
+  const yLabelPadding = padding.left - 10 + Math.pow(1.5, toFixed);
+
   const yLabels = [minPrice, (minPrice + maxPrice) / 2, maxPrice]
     .map((price, i) => {
       const y = padding.top + (chartHeight - (i * chartHeight) / 2);
       return `
-        <text x="${padding.left - 10}" y="${y}" text-anchor="end" fill="${textColor}" font-size="12">
-          $${(price / 1000).toFixed(1)}k
+        <text x="${yLabelPadding}" y="${y}" text-anchor="end" fill="${textColor}" font-size="12">
+          $${price > 1000 ? (price / 1000).toFixed(toFixed) + 'k' : price.toFixed(toFixed)}
         </text>
-        <line x1="${padding.left}" y1="${y}" x2="${
-          width - padding.right
-        }" y2="${y}" stroke="${textColor}" stroke-opacity="0.2" />
+        <line x1="${padding.left}" y1="${y}" x2="${width - padding.right}" y2="${y}" stroke="${textColor}" stroke-opacity="0.2" />
       `;
     })
     .join('');
@@ -117,7 +119,7 @@ export const generateChart = (
 
   const lastPriceLabel = `
     <text x="${lastPriceX}" y="${lastPriceY}" fill="${textColor}" font-size="12">
-      $${lastPrice.toFixed(2)}
+      $${lastPrice.toFixed(toFixed)}
     </text>
   `;
 

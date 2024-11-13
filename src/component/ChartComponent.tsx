@@ -1,4 +1,3 @@
-import React from 'react';
 import { ChartOptions, CoinDataPoint } from '@/types/types';
 import { getCoinIconUrl, getCoinName } from '@/utils/utils';
 
@@ -18,6 +17,7 @@ export default function ChartComponent({ data, coinSymbol, days, options }: Prop
   const maxPrice = Math.max(...data.map((d) => d.price));
   const minPrice = Math.min(...data.map((d) => d.price));
   const priceRange = maxPrice - minPrice || 1;
+  const toFixed = options.toFixed || 2;
 
   const pointsArray = data.map((d, i) => {
     const x = (i / (data.length - 1 || 1)) * chartWidth + padding.left;
@@ -40,7 +40,7 @@ export default function ChartComponent({ data, coinSymbol, days, options }: Prop
   const minYThreshold = height - padding.bottom - 10;
   const isLastPointLow = lastPoint.y > minYThreshold;
 
-  const labelPaddingX = -30;
+  const labelPaddingX = toFixed > 6 ? -36 : -28;
   let labelPaddingY = secondLastPoint.y < lastPoint.y ? 20 : -20;
 
   if (isLastPointLow && lastPoint.y >= secondLastPoint.y) {
@@ -105,13 +105,13 @@ export default function ChartComponent({ data, coinSymbol, days, options }: Prop
       {[minPrice, (minPrice + maxPrice) / 2, maxPrice].map((price, idx) => (
         <g key={idx}>
           <text
-            x={padding.left - 10}
+            x={padding.left - 10 + toFixed ** 1.6}
             y={padding.top + (chartHeight - (idx * chartHeight) / 2)}
             textAnchor='end'
             fill={textColor}
             fontSize='12'
           >
-            ${(price / 1000).toFixed(1)}k
+            ${price > 1000 ? (price / 1000).toFixed(toFixed) + 'k' : price.toFixed(toFixed)}
           </text>
           <line
             x1={padding.left}
@@ -126,7 +126,7 @@ export default function ChartComponent({ data, coinSymbol, days, options }: Prop
 
       {/* Last Price Label */}
       <text x={lastPoint.x + labelPaddingX} y={lastPoint.y + labelPaddingY} fill={textColor} fontSize='12'>
-        ${lastPrice.toFixed(2)}
+        ${lastPrice.toFixed(toFixed)}
       </text>
     </svg>
   );

@@ -1,5 +1,7 @@
 import { CoinDataPoint, CoinSymbol } from '@/types/types';
+import { getCurrentTimestamp, getStartTimestamp } from '@/utils/utils';
 import { MAX_DAYS, REVALIDATE_INTERVAL } from '@/const/const';
+import { fetchKRWToUSDExchangeRate } from '@/lib/fetchKrwToUsdExchangeRate';
 
 /**
  * Common fetch function to retrieve JSON data from a given URL.
@@ -11,12 +13,36 @@ async function fetchJSON(url: string): Promise<any> {
     next: { revalidate: REVALIDATE_INTERVAL },
   });
 
-  if (!response.ok) {
+  if (!response.ok || !(response.status === 200)) {
     const errorText = await response.text();
     throw new Error(`Fetch error: ${response.status} - ${errorText}`);
   }
 
   return response.json();
+}
+
+/**
+ * Fetches daily price data for a specified coin from Bithumb.
+ * @param coinSymbol Coin symbol (e.g., 'btc', 'eth')
+ * @returns Array of objects containing date and price
+ */
+export async function fetchFromBithumb(coinSymbol: CoinSymbol): Promise<CoinDataPoint[]> {
+  const market = COIN_ID_LOOKUP.bithumb[coinSymbol];
+  if (!market) {
+    throw new Error(`Bithumb does not support the symbol '${coinSymbol}'.`);
+  }
+
+  const url = `https://api.bithumb.com/v1/candles/days?market=${market}&count=${MAX_DAYS}`;
+  const data = await fetchJSON(url);
+
+  const krwToUsdRate = await fetchKRWToUSDExchangeRate();
+
+  return data
+    .reverse() // 배열 뒤집기
+    .map((item: any) => ({
+      date: new Date(item.candle_date_time_utc).toISOString().slice(0, 10),
+      price: item.trade_price / krwToUsdRate,
+    }));
 }
 
 /**
@@ -58,6 +84,31 @@ export async function fetchFromCoinGecko(coinSymbol: CoinSymbol): Promise<CoinDa
   return prices.map(([timestamp, price]) => ({
     date: new Date(timestamp).toISOString().slice(0, 10), // YYYY-MM-DD format
     price,
+  }));
+}
+
+/**
+ * Fetches daily price data for a specified coin from CoinCap.
+ * @param coinSymbol Coin symbol (e.g., 'btc', 'eth')
+ * @returns Array of objects containing date and price
+ */
+export async function fetchFromCoinCap(coinSymbol: CoinSymbol): Promise<CoinDataPoint[]> {
+  const coinId = COIN_ID_LOOKUP.cap[coinSymbol];
+  if (!coinId) {
+    throw new Error(`CoinCap does not support the symbol '${coinSymbol}'.`);
+  }
+
+  const startTimestamp = getStartTimestamp(MAX_DAYS + 1);
+  const endTimestamp = getCurrentTimestamp();
+
+  const url = `${process.env.COINCAP_API_URL}/assets/${coinId}/history?interval=d1&start=${startTimestamp}&end=${endTimestamp}`;
+  const data = await fetchJSON(url);
+
+  const prices: { priceUsd: string; time: number }[] = data.data;
+
+  return prices.map((item) => ({
+    date: new Date(item.time).toISOString().slice(0, 10), // YYYY-MM-DD format
+    price: parseFloat(item.priceUsd),
   }));
 }
 
@@ -112,5 +163,13 @@ export const COIN_ID_LOOKUP: Record<string, Record<CoinSymbol, string>> = {
     doge: 'DOGE',
     pepe: 'PEPE',
     sol: 'SOL',
+  },
+  bithumb: {
+    btc: 'KRW-BTC',
+    eth: 'KRW-ETH',
+    xrp: 'KRW-XRP',
+    doge: 'KRW-DOGE',
+    pepe: 'KRW-PEPE',
+    sol: 'KRW-SOL',
   },
 };

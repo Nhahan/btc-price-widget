@@ -10,7 +10,8 @@ export const runtime = 'edge';
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   const { searchParams } = new URL(request.url);
-  const { coinSymbol, days, theme, width, height, showIcon } = getValidatedParams(searchParams);
+  // const { coinSymbol, days, theme, width, height, showIcon } = getValidatedParams(searchParams);
+  const { coinSymbol, theme } = getValidatedParams(searchParams);
 
   try {
     const coinDataPoints = await fetchCoinData(coinSymbol);
@@ -20,12 +21,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }));
 
     if (coinData.length > 0) {
-      const slicedData = coinData.slice(-days);
-      const chart = generateChart(slicedData, coinSymbol, days, {
-        width,
-        height,
+      const slicedData = coinData.slice(-28);
+      const chart = generateChart(slicedData, coinSymbol, 28, {
+        width: 640,
+        height: 640 / 2,
         ...theme,
-        showIcon,
+        showIcon: true,
         toFixed: COINS[coinSymbol].toFixed,
       });
 

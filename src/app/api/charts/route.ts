@@ -33,7 +33,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         status: 200,
         headers: {
           'Content-Type': 'image/svg+xml',
-          'Cache-Control': `public, s-maxage=${REVALIDATE_INTERVAL - 1}, stale-while-revalidate=${REVALIDATE_INTERVAL}`,
+          'Cache-Control': `public, s-maxage=${REVALIDATE_INTERVAL}, stale-while-revalidate=${REVALIDATE_INTERVAL}`,
         },
       });
     }

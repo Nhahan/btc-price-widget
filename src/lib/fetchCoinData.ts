@@ -1,11 +1,5 @@
 import { CoinDataPoint, CoinSymbol } from '@/types/types';
-import {
-  fetchFromBinance,
-  fetchFromCoinCap,
-  fetchFromCoinGecko,
-  fetchFromCoinPaprika,
-  fetchFromCryptoCompare,
-} from '@/api/coin';
+import { fetchFromBinance, fetchFromCoinGecko, fetchFromCryptoCompare } from '@/api/coin';
 import { MAX_DAYS, REVALIDATE_INTERVAL } from '@/const/const';
 import { unstableCache } from '@/utils/cacheUtils';
 
@@ -20,10 +14,8 @@ export const fetchCoinData = async (coinSymbol: CoinSymbol): Promise<CoinDataPoi
 
   const fetchFunction = async (): Promise<CoinDataPoint[]> => {
     const dataFetchers = [
-      { fn: fetchFromBinance, name: 'fetchFromBinance' },
       { fn: fetchFromCoinGecko, name: 'fetchFromCoinGecko' },
-      { fn: fetchFromCoinPaprika, name: 'fetchFromCoinPaprika' },
-      { fn: fetchFromCoinCap, name: 'fetchFromCoinCap' },
+      { fn: fetchFromBinance, name: 'fetchFromBinance' },
       { fn: fetchFromCryptoCompare, name: 'fetchFromCryptoCompare' },
     ];
 

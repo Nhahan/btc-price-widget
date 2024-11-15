@@ -5,7 +5,7 @@ import SvgChartComponent from '@/component/SvgChartComponent';
 import { ThemeName, themes } from '@/types/theme';
 import { generateChart } from '@/lib/generateChart';
 import { generateFakeCoinData } from '@/utils/utils';
-import { COINS } from '@/const/const';
+import { COINS, DEFAULT_DAYS } from '@/const/const';
 
 export default function Pages() {
   const [displayedCharts, setDisplayedCharts] = useState<{ theme: ThemeName; svg: string }[]>([]);
@@ -43,11 +43,11 @@ export default function Pages() {
 }
 
 function createChart() {
-  const coinData = generateFakeCoinData(30, 68000, 2000);
+  const coinData = generateFakeCoinData(DEFAULT_DAYS, 68000, 2000);
 
   return (Object.keys(themes) as ThemeName[]).map((themeName) => {
     const theme = themes[themeName];
-    const svg = generateChart(coinData, 'btc', 30, {
+    const svg = generateChart(coinData, 'btc', DEFAULT_DAYS, {
       width: 700,
       height: 350,
       bgColor: theme.bgColor,

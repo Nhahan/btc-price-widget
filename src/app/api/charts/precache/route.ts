@@ -7,6 +7,7 @@ import { THEMES, VALID_COINS } from '@/const/const';
  * @param request NextRequest object containing the request details
  * @returns NextResponse indicating the result of the precaching operation
  */
+// DEPRECATED
 export async function POST(request: NextRequest) {
   const cronSecret = process.env.CRON_SECRET;
   const authorizationHeader = request.headers.get('Authorization');

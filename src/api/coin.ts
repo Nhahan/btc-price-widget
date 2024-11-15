@@ -1,5 +1,4 @@
-import { CoinDataPoint, CoinPaprikaData, CoinSymbol } from '@/types/types';
-import { getCurrentDate, getCurrentTimestamp, getStartDate, getStartTimestamp } from '@/utils/utils';
+import { CoinDataPoint, CoinSymbol } from '@/types/types';
 import { MAX_DAYS, REVALIDATE_INTERVAL } from '@/const/const';
 
 /**
@@ -63,54 +62,6 @@ export async function fetchFromCoinGecko(coinSymbol: CoinSymbol): Promise<CoinDa
 }
 
 /**
- * Fetches daily price data for a specified coin from CoinPaprika.
- * @param coinSymbol Coin symbol (e.g., 'btc', 'eth')
- * @returns Array of objects containing date and price
- */
-export async function fetchFromCoinPaprika(coinSymbol: CoinSymbol): Promise<CoinDataPoint[]> {
-  const coinId = COIN_ID_LOOKUP.paprika[coinSymbol];
-  if (!coinId) {
-    throw new Error(`CoinPaprika does not support the symbol '${coinSymbol}'.`);
-  }
-
-  const startDate = getStartDate(MAX_DAYS);
-  const endDate = getCurrentDate();
-
-  const url = `${process.env.COINPAPRIKA_API_URL}/coins/${coinId}/ohlcv/historical?start=${startDate}&end=${endDate}`;
-  const data: CoinPaprikaData[] = await fetchJSON(url);
-
-  return data.map((item) => ({
-    date: item.time_open.split('T')[0], // YYYY-MM-DD format
-    price: item.close,
-  }));
-}
-
-/**
- * Fetches daily price data for a specified coin from CoinCap.
- * @param coinSymbol Coin symbol (e.g., 'btc', 'eth')
- * @returns Array of objects containing date and price
- */
-export async function fetchFromCoinCap(coinSymbol: CoinSymbol): Promise<CoinDataPoint[]> {
-  const coinId = COIN_ID_LOOKUP.cap[coinSymbol];
-  if (!coinId) {
-    throw new Error(`CoinCap does not support the symbol '${coinSymbol}'.`);
-  }
-
-  const startTimestamp = getStartTimestamp(MAX_DAYS);
-  const endTimestamp = getCurrentTimestamp();
-
-  const url = `${process.env.COINCAP_API_URL}/assets/${coinId}/history?interval=d1&start=${startTimestamp}&end=${endTimestamp}`;
-  const data = await fetchJSON(url);
-
-  const prices: { priceUsd: string; time: number }[] = data.data;
-
-  return prices.map((item) => ({
-    date: new Date(item.time).toISOString().slice(0, 10), // YYYY-MM-DD format
-    price: parseFloat(item.priceUsd),
-  }));
-}
-
-/**
  * Fetches daily price data for a specified coin from CryptoCompare.
  * @param coinSymbol Coin symbol (e.g., 'btc', 'eth')
  * @returns Array of objects containing date and price
@@ -129,7 +80,7 @@ export async function fetchFromCryptoCompare(coinSymbol: CoinSymbol): Promise<Co
     throw new Error(`CryptoCompare API error: ${data.Message}`);
   }
 
-  const prices = data.Data.Data; // Array of { time, close, ... }
+  const prices = data.Data.Data;
 
   return prices.map((item: { time: number; close: number }) => ({
     date: new Date(item.time * 1000).toISOString().slice(0, 10), // YYYY-MM-DD format
@@ -147,22 +98,6 @@ export const COIN_ID_LOOKUP: Record<string, Record<CoinSymbol, string>> = {
     sol: 'SOLUSDT',
   },
   gecko: {
-    btc: 'bitcoin',
-    eth: 'ethereum',
-    xrp: 'ripple',
-    doge: 'dogecoin',
-    pepe: 'pepe',
-    sol: 'solana',
-  },
-  paprika: {
-    btc: 'btc-bitcoin',
-    eth: 'eth-ethereum',
-    xrp: 'xrp-xrp',
-    doge: 'doge-dogecoin',
-    pepe: 'pepe-pepe',
-    sol: 'sol-solana',
-  },
-  cap: {
     btc: 'bitcoin',
     eth: 'ethereum',
     xrp: 'ripple',

@@ -1,5 +1,5 @@
 import { ChartOptions, CoinDataPoint, CoinSymbol } from '@/types/types';
-import { getCoinIconUrl } from '@/utils/utils';
+import { capitalizeFirstLetter, getCoinIconUrl } from '@/utils/utils';
 import { COINS } from '@/const/const';
 
 export function generateChart(
@@ -46,7 +46,7 @@ export function generateChart(
     labelPaddingY = -5;
   }
 
-  const titleText = `${COINS[coinSymbol as CoinSymbol].name} Chart (${days} Days)`;
+  const titleText = `${capitalizeFirstLetter(COINS[coinSymbol as CoinSymbol].id)} Chart (${days} Days)`;
   const titleX = (width - titleText.length * 10 - 30) / 2;
 
   const numLabels = Math.max(2, Math.floor(width / 100));

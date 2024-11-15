@@ -2,12 +2,12 @@ import { ThemeName } from '@/types/theme';
 import { CoinId, CoinSymbol } from '@/types/types';
 
 export const COINS = {
-  btc: { id: 'bitcoin', name: 'Bitcoin', basePrice: 82500, variation: 3535, rate: 1, toFixed: 2 },
-  eth: { id: 'ethereum', name: 'Ethereum', basePrice: 3500, variation: 255, rate: 1, toFixed: 2 },
-  xrp: { id: 'ripple', name: 'Ripple', basePrice: 0.712311, variation: 0.1111, rate: 1, toFixed: 6 },
-  doge: { id: 'dogecoin', name: 'Dogecoin', basePrice: 0.345611, variation: 0.0555, rate: 1, toFixed: 6 },
-  pepe: { id: 'pepe', name: 'Pepe', basePrice: 0.00001234, variation: 0.0000055, rate: 1, toFixed: 8 },
-  sol: { id: 'solana', name: 'Solana', basePrice: 222, variation: 33, rate: 1, toFixed: 2 },
+  btc: { id: 'bitcoin', basePrice: 82500, variation: 3535, rate: 1, toFixed: 2 },
+  eth: { id: 'ethereum', basePrice: 3500, variation: 255, rate: 1, toFixed: 2 },
+  xrp: { id: 'ripple', basePrice: 0.712311, variation: 0.1111, rate: 1, toFixed: 6 },
+  doge: { id: 'dogecoin', basePrice: 0.345611, variation: 0.0555, rate: 1, toFixed: 6 },
+  pepe: { id: 'pepe', basePrice: 0.00001234, variation: 0.0000055, rate: 1, toFixed: 8 },
+  sol: { id: 'solana', basePrice: 222, variation: 33, rate: 1, toFixed: 2 },
 } as const;
 
 export const VALID_COINS = Object.keys(COINS) as CoinSymbol[];

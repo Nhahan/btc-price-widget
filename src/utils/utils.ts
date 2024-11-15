@@ -18,6 +18,10 @@ export function generateNonce(): string {
     .join('');
 }
 
+export function capitalizeFirstLetter(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 export function generateFakeCoinData(days = 31, basePrice = 82500, variation = 2500, rate = 1, toFixed = 2) {
   let price = basePrice,
     lt = ((Math.random() - 0.5) * variation) / 100,

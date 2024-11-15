@@ -4,24 +4,6 @@ import { MAX_DAYS, REVALIDATE_INTERVAL } from '@/const/const';
 import { fetchKRWToUSDExchangeRate } from '@/lib/fetchKrwToUsdExchangeRate';
 
 /**
- * Common fetch function to retrieve JSON data from a given URL.
- * @param url API endpoint URL
- * @returns JSON response
- */
-async function fetchJSON(url: string): Promise<any> {
-  const response = await fetch(url, {
-    next: { revalidate: REVALIDATE_INTERVAL },
-  });
-
-  if (!response.ok || !(response.status === 200)) {
-    const errorText = await response.text();
-    throw new Error(`Fetch error: ${response.status} - ${errorText}`);
-  }
-
-  return response.json();
-}
-
-/**
  * Fetches daily price data for a specified coin from Bithumb.
  * @param coinSymbol Coin symbol (e.g., 'btc', 'eth')
  * @returns Array of objects containing date and price
@@ -37,12 +19,10 @@ export async function fetchFromBithumb(coinSymbol: CoinSymbol): Promise<CoinData
 
   const krwToUsdRate = await fetchKRWToUSDExchangeRate();
 
-  return data
-    .reverse() // 배열 뒤집기
-    .map((item: any) => ({
-      date: new Date(item.candle_date_time_utc).toISOString().slice(0, 10),
-      price: item.trade_price / krwToUsdRate,
-    }));
+  return data.reverse().map((item: any) => ({
+    date: new Date(item.candle_date_time_utc).toISOString().slice(0, 10),
+    price: item.trade_price / krwToUsdRate,
+  }));
 }
 
 /**
@@ -125,7 +105,7 @@ export async function fetchFromCryptoCompare(coinSymbol: CoinSymbol): Promise<Co
 
   const url = `${process.env.CRYPTOCOMPARE_API_URL}/data/v2/histoday?fsym=${coinId}&tsym=USD&limit=${MAX_DAYS}`;
 
-  const data = await fetchJSON(url);
+  const data = await fetchJSON(url, { Apikey: process.env.CRYPTOCOMPARE_API_KEY || '' });
 
   if (data.Response !== 'Success') {
     throw new Error(`CryptoCompare API error: ${data.Message}`);
@@ -173,3 +153,24 @@ export const COIN_ID_LOOKUP: Record<string, Record<CoinSymbol, string>> = {
     sol: 'KRW-SOL',
   },
 };
+
+/**
+ * Common fetch function to retrieve JSON data from a given URL.
+ * @param url API endpoint URL
+ * @param headers
+ * @returns JSON response
+ */
+async function fetchJSON(url: string, headers: Record<string, string> = {}): Promise<any> {
+  const defaultHeaders = { 'Content-Type': 'application/json' };
+  const response = await fetch(url, {
+    headers: new Headers({ ...defaultHeaders, ...headers }),
+    next: { revalidate: REVALIDATE_INTERVAL },
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Fetch error: ${response.status} - ${errorText}`);
+  }
+
+  return response.json();
+}

@@ -14,7 +14,7 @@ export async function fetchFromBithumb(coinSymbol: CoinSymbol): Promise<CoinData
     throw new Error(`Bithumb does not support the symbol '${coinSymbol}'.`);
   }
 
-  const url = `https://api.bithumb.com/v1/candles/days?market=${market}&count=${MAX_DAYS}`;
+  const url = `${process.env.BITHUMB_API_URL}/candles/days?market=${market}&count=${MAX_DAYS}`;
   const data = await fetchJSON(url);
 
   const krwToUsdRate = await fetchKRWToUSDExchangeRate();
@@ -103,9 +103,8 @@ export async function fetchFromCryptoCompare(coinSymbol: CoinSymbol): Promise<Co
     throw new Error(`CryptoCompare does not support the symbol '${coinSymbol}'.`);
   }
 
-  const url = `${process.env.CRYPTOCOMPARE_API_URL}/data/v2/histoday?fsym=${coinId}&tsym=USD&limit=${MAX_DAYS}`;
-
-  const data = await fetchJSON(url, { Apikey: process.env.CRYPTOCOMPARE_API_KEY || '' });
+  const url = `${process.env.CRYPTOCOMPARE_API_URL}/data/v2/histoday?fsym=${coinId}&tsym=USD&limit=${MAX_DAYS}&api_key=${process.env.CRYPTOCOMPARE_API_KEY}`;
+  const data = await fetchJSON(url);
 
   if (data.Response !== 'Success') {
     throw new Error(`CryptoCompare API error: ${data.Message}`);

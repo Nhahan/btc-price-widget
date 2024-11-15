@@ -1,22 +1,22 @@
-import { CoinSymbol } from '@/types/types';
 import { MAX_DAYS } from '@/const/const';
+import { CoinSymbol } from '@/types/types';
+import { btcBase64, dogeBase64, ethBase64, pepeBase64, solBase64, xrpBase64 } from '@/base64/base64coins';
 
 export const getCoinIconUrl = (coinSymbol: CoinSymbol): string => {
-  return `/images/${coinSymbol}.png`;
-};
+  const base64Icons: Record<CoinSymbol, string> = {
+    btc: btcBase64,
+    eth: ethBase64,
+    doge: dogeBase64,
+    xrp: xrpBase64,
+    sol: solBase64,
+    pepe: pepeBase64,
+  };
 
-export const getCurrentDate = (): string => {
-  return new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+  return base64Icons[coinSymbol] || btcBase64;
 };
 
 export const getCurrentTimestamp = (): number => {
   return new Date().getTime();
-};
-
-export const getStartDate = (days: number): string => {
-  const startDate = new Date();
-  startDate.setDate(startDate.getDate() - days);
-  return startDate.toISOString().split('T')[0]; // YYYY-MM-DD
 };
 
 export const getStartTimestamp = (days: number): number => {

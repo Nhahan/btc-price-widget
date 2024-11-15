@@ -1,5 +1,3 @@
-'use client';
-
 import { ChangeEvent, useEffect, useState } from 'react';
 import { CheckCircle2, Copy } from 'lucide-react';
 import FadeIn from '../motion/FadeIn';
@@ -22,7 +20,7 @@ export default function DemoSection() {
   const height: number = width / 2;
 
   useEffect(() => {
-    const coinSettings = COINS[coinSymbol]; // 현재 선택된 코인 설정 가져오기
+    const coinSettings = COINS[coinSymbol];
     const generatedData = generateFakeCoinData(
       DEFAULT_DAYS,
       coinSettings.basePrice,
@@ -45,7 +43,7 @@ export default function DemoSection() {
     textColor: currentTheme.textColor,
     pointColor: currentTheme.pointColor,
     showIcon: true,
-    toFixed: COINS[coinSymbol].toFixed, // 선택된 코인의 toFixed 설정 반영
+    toFixed: COINS[coinSymbol].toFixed,
   };
 
   const markdownCode: string = `![Chart](https://btc-price-widget.vercel.app/api/charts?coin=${coinSymbol}&theme=${selectedTheme})`;

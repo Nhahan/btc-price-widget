@@ -3,6 +3,7 @@
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": "error",
+    "quotes": ["error", "single"],
     "@typescript-eslint/no-explicit-any": "off"
   }
 }

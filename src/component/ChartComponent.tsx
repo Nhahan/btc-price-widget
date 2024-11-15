@@ -4,7 +4,7 @@ import { COINS } from '@/const/const';
 
 type Props = {
   data: CoinDataPoint[];
-  coinSymbol: string;
+  coinSymbol: CoinSymbol;
   days: number;
   options: ChartOptions;
 };

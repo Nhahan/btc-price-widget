@@ -2,7 +2,12 @@ import { ChartOptions, CoinDataPoint, CoinSymbol } from '@/types/types';
 import { getCoinIconUrl } from '@/utils/utils';
 import { COINS } from '@/const/const';
 
-export function generateChart(data: CoinDataPoint[], coinSymbol: string, days: number, options: ChartOptions): string {
+export function generateChart(
+  data: CoinDataPoint[],
+  coinSymbol: CoinSymbol,
+  days: number,
+  options: ChartOptions,
+): string {
   const { width, height, bgColor, lineColor, textColor, pointColor, showIcon } = options;
   const padding = { top: 50, right: 37, bottom: 35, left: 57 };
   const chartWidth = width - padding.left - padding.right;

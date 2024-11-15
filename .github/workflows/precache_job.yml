@@ -1,8 +1,8 @@
 name: Precache API Cron Job
 
-on:
-  schedule:
-    - cron: '*/20 * * * *' # 30minutes interval
+#on:
+#  schedule:
+#    - cron: '*/20 * * * *' # 30minutes interval
 
 jobs:
   precache:

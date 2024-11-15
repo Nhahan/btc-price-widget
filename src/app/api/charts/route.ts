@@ -17,7 +17,6 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       date,
       price: +price.toFixed(COINS[coinSymbol].toFixed),
     }));
-    console.log(coinData);
     if (coinData.length > 0) {
       const slicedData = coinData.slice(-days);
       const chart = generateChart(slicedData, coinSymbol, days, {

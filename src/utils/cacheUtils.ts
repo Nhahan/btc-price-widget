@@ -50,9 +50,13 @@ export function unstableCache<T extends (...args: any[]) => Promise<any>>(
 ) {
   const devCache = DevCache.getInstance();
 
+  const logError = (error: any, cacheKey: string) => {
+    console.error(`Error executing function ${fn.name} with cache key ${cacheKey}:`, error);
+  };
+
   if (process.env.NODE_ENV === 'development') {
     // use in-memory cache in development
-    return async (...args: Parameters<T>): Promise<ReturnType<T>> => {
+    return async (...args: Parameters<T>) => {
       const cacheKey = [...keyParts, ...args].join(':');
 
       const cachedValue = await devCache.get<ReturnType<T>>(cacheKey);
@@ -61,16 +65,28 @@ export function unstableCache<T extends (...args: any[]) => Promise<any>>(
         return cachedValue;
       }
 
-      const result = await fn(...args);
-      await devCache.set(cacheKey, result, options.revalidate);
-      console.log('New cache entry:', cacheKey, (result as any[])[0]);
-      return result;
+      try {
+        const result = await fn(...args);
+        await devCache.set(cacheKey, result, options.revalidate);
+        console.log('New cache entry:', cacheKey, (result as any[])[0]);
+        return result;
+      } catch (error) {
+        logError(error, cacheKey);
+      }
     };
   } else {
     // use unstable_cache in production
-    return unstable_cache(fn, keyParts, {
-      revalidate: options.revalidate,
-      tags: options.tags,
-    });
+    return async (...args: Parameters<T>) => {
+      const cacheKey = [...keyParts, ...args].join(':');
+
+      try {
+        return await unstable_cache(fn, keyParts, {
+          revalidate: options.revalidate,
+          tags: options.tags,
+        })(...args);
+      } catch (error) {
+        logError(error, cacheKey);
+      }
+    };
   }
 }

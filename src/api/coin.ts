@@ -18,6 +18,10 @@ export const fetchFromCoinGecko = async (coinSymbol: CoinSymbol): Promise<CoinDa
   );
 
   if (!response.ok) {
+    console.error(
+      `${process.env.COINGECKO_API_URL}/coins/${coinId}/market_chart?vs_currency=usd&days=${days}&interval=daily`,
+      response,
+    );
     throw new Error(`Failed to fetch data for ${coinId} from CoinGecko. Status: ${response.status}`);
   }
 
@@ -46,6 +50,12 @@ export const fetchFromCoinPaprika = async (coinSymbol: CoinSymbol): Promise<Coin
   );
 
   if (!response.ok) {
+    console.error(
+      `${process.env.COINPAPRIKA_API_URL}/coins/${coinId}/ohlcv/historical?start=${getStartDate(
+        days,
+      )}&end=${getCurrentDate()}`,
+      response,
+    );
     throw new Error(`Failed to fetch data for ${coinId} from CoinPaprika. Status: ${response.status}`);
   }
 
@@ -72,6 +82,12 @@ export const fetchFromCoinCap = async (coinSymbol: CoinSymbol): Promise<CoinData
   );
 
   if (!response.ok) {
+    console.error(
+      `${process.env.COINCAP_API_URL}/assets/${coinId}/history?interval=d1&start=${getStartTimestamp(
+        days,
+      )}&end=${getCurrentTimestamp()}\n`,
+      response,
+    );
     throw new Error(`Failed to fetch data for ${coinId} from CoinCap. Status: ${response.status}`);
   }
 

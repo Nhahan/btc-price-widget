@@ -1,5 +1,5 @@
 import { ThemeName } from '@/types/theme';
-import { CoinId, CoinSymbol } from '@/types/types';
+import { CoinSymbol } from '@/types/types';
 
 export const COINS = {
   btc: { id: 'bitcoin', basePrice: 82500, variation: 3535, rate: 1, toFixed: 2 },
@@ -11,10 +11,6 @@ export const COINS = {
 } as const;
 
 export const VALID_COINS = Object.keys(COINS) as CoinSymbol[];
-
-export const COIN_MAP: Record<CoinSymbol, CoinId> = Object.fromEntries(
-  Object.entries(COINS).map(([symbol, data]) => [symbol, data.id]),
-) as Record<CoinSymbol, CoinId>;
 
 export const MIN_DAYS = 7;
 export const MAX_DAYS = 31;

@@ -17,7 +17,7 @@ export interface CoinPaprikaData {
 }
 
 export type CoinSymbol = keyof typeof COINS;
-export type CoinId = (typeof COINS)[CoinSymbol]['id'];
+export type CoinName = (typeof COINS)[CoinSymbol]['id'];
 
 export interface ChartOptions {
   width: number;

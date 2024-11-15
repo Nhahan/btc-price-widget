@@ -20,24 +20,24 @@ export const fetchCoinData = async (coinSymbol: CoinSymbol): Promise<CoinDataPoi
 
   const fetchFunction = async (): Promise<CoinDataPoint[]> => {
     const dataFetchers = [
-      fetchFromBinance,
-      fetchFromCoinGecko,
-      fetchFromCoinPaprika,
-      fetchFromCoinCap,
-      fetchFromCryptoCompare,
+      { fn: fetchFromBinance, name: 'fetchFromBinance' },
+      { fn: fetchFromCoinGecko, name: 'fetchFromCoinGecko' },
+      { fn: fetchFromCoinPaprika, name: 'fetchFromCoinPaprika' },
+      { fn: fetchFromCoinCap, name: 'fetchFromCoinCap' },
+      { fn: fetchFromCryptoCompare, name: 'fetchFromCryptoCompare' },
     ];
 
-    for (const fetcher of dataFetchers) {
+    for (const { fn, name } of dataFetchers) {
       try {
-        const data: CoinDataPoint[] = await fetcher(coinSymbol);
+        const data: CoinDataPoint[] = await fn(coinSymbol);
 
         if (data.length >= MAX_DAYS) {
-          console.log(`Successfully fetched data for ${coinSymbol} using ${fetcher.name}`);
+          console.log(`Successfully fetched data for ${coinSymbol} using ${name}`);
           return data.slice(-MAX_DAYS);
         }
-        console.warn(`${fetcher.name} returned insufficient data. (Required: ${MAX_DAYS}, Received: ${data.length})`);
+        console.warn(`${name} returned insufficient data. (Required: ${MAX_DAYS}, Received: ${data.length})`);
       } catch (error) {
-        console.warn(`Error fetching data for ${coinSymbol} using ${fetcher.name}:`, error);
+        console.warn(`Error fetching data for ${coinSymbol} using ${name}:`, error);
       }
     }
 

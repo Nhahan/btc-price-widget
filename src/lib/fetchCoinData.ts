@@ -1,32 +1,52 @@
-import { unstableCache } from '@/utils/cacheUtils';
 import { CoinDataPoint, CoinSymbol } from '@/types/types';
-import { fetchFromCoinCap, fetchFromCoinGecko, fetchFromCoinPaprika } from '@/api/coin';
+import {
+  fetchFromBinance,
+  fetchFromCoinCap,
+  fetchFromCoinGecko,
+  fetchFromCoinPaprika,
+  fetchFromCryptoCompare,
+} from '@/api/coin';
 import { MAX_DAYS, REVALIDATE_INTERVAL } from '@/const/const';
+import { unstableCache } from '@/utils/cacheUtils';
 
 /**
- * Fetches daily price data for a specified coin from multiple APIs.
- * Always fetches 31 days of data to enable caching.
- * @param coinSymbol Coin symbol (e.g., 'btc' or 'eth')
+ * Fetches daily price data for a specified coin from multiple APIs sequentially.
+ * Returns data from the first successful API with sufficient data.
+ * @param coinSymbol Coin symbol (e.g., 'btc', 'eth')
  * @returns Array of objects containing date and price
  */
 export const fetchCoinData = async (coinSymbol: CoinSymbol): Promise<CoinDataPoint[]> => {
-  const dataFetchers = [fetchFromCoinGecko, fetchFromCoinPaprika, fetchFromCoinCap];
+  const cacheKey = ['fetchCoinData', coinSymbol];
 
-  for (const fetchFunction of dataFetchers) {
-    console.log(`Attempting to fetch data for ${coinSymbol} using ${fetchFunction.name}`);
-    try {
-      const data: CoinDataPoint[] = await unstableCache(() => fetchFunction(coinSymbol), ['coinData', coinSymbol], {
-        revalidate: REVALIDATE_INTERVAL,
-      })();
+  const fetchFunction = async (): Promise<CoinDataPoint[]> => {
+    const dataFetchers = [
+      fetchFromBinance,
+      fetchFromCoinGecko,
+      fetchFromCoinPaprika,
+      fetchFromCoinCap,
+      fetchFromCryptoCompare,
+    ];
 
-      if (data.length >= MAX_DAYS) {
-        return data.slice(-MAX_DAYS); // Ensure the correct number of days
+    for (const fetcher of dataFetchers) {
+      console.log(`Attempting to fetch data for ${coinSymbol} using ${fetcher.name}`);
+      try {
+        const data: CoinDataPoint[] = await fetcher(coinSymbol);
+
+        if (data.length >= MAX_DAYS) {
+          return data.slice(-MAX_DAYS);
+        } else {
+          console.warn(`${fetcher.name} returned insufficient data. (Required: ${MAX_DAYS}, Received: ${data.length})`);
+        }
+      } catch (error) {
+        console.warn(`Error fetching data for ${coinSymbol} using ${fetcher.name}:`, error);
       }
-    } catch (error) {
-      console.warn(`Error fetching data for ${coinSymbol} using ${fetchFunction.name}:`, error);
     }
-  }
 
-  console.error('Failed to fetch data from all sources.');
-  return [];
+    console.error('Failed to fetch data from all sources.');
+    return [];
+  };
+
+  return await unstableCache(fetchFunction, cacheKey, {
+    revalidate: REVALIDATE_INTERVAL,
+  })();
 };

@@ -3,9 +3,6 @@ name: Precache API Cron Job
 on:
   schedule:
     - cron: '*/30 * * * *' # 30minutes interval
-  push:
-    branches:
-      - main
 
 jobs:
   precache:

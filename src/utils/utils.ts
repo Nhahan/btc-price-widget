@@ -1,15 +1,28 @@
 import { CoinSymbol } from '@/types/types';
+import { MAX_DAYS } from '@/const/const';
 
 export const getCoinIconUrl = (coinSymbol: CoinSymbol): string => {
   return `/images/${coinSymbol}.png`;
 };
 
-export const getCurrentTimestamp = (): number => {
-  return Date.now();
+export const getCurrentDate = (): string => {
+  return new Date().toISOString().split('T')[0]; // YYYY-MM-DD
 };
 
-export const getCurrentDate = (): string => {
-  return new Date().toISOString().split('T')[0];
+export const getCurrentTimestamp = (): number => {
+  return new Date().getTime();
+};
+
+export const getStartDate = (days: number): string => {
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - days);
+  return startDate.toISOString().split('T')[0]; // YYYY-MM-DD
+};
+
+export const getStartTimestamp = (days: number): number => {
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - days);
+  return startDate.getTime();
 };
 
 export function generateNonce(): string {
@@ -22,7 +35,7 @@ export function capitalizeFirstLetter(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export function generateFakeCoinData(days = 31, basePrice = 82500, variation = 2500, rate = 1, toFixed = 2) {
+export function generateFakeCoinData(days = MAX_DAYS, basePrice = 82500, variation = 2500, rate = 1, toFixed = 2) {
   let price = basePrice,
     lt = ((Math.random() - 0.5) * variation) / 100,
     st = ((Math.random() - 0.5) * variation) / 50;

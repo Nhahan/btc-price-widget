@@ -13,10 +13,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   const { coinSymbol, days, theme, width, height, showIcon } = getValidatedParams(searchParams);
 
   try {
-    const coinData: CoinDataPoint[] = (await fetchCoinData(coinSymbol)).map(({ date, price }) => ({
+    const coinDataPoints = await fetchCoinData(coinSymbol);
+    const coinData: CoinDataPoint[] = coinDataPoints.map(({ date, price }: CoinDataPoint) => ({
       date,
       price: +price.toFixed(COINS[coinSymbol].toFixed),
     }));
+
     if (coinData.length > 0) {
       const slicedData = coinData.slice(-days);
       const chart = generateChart(slicedData, coinSymbol, days, {
@@ -31,7 +33,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         status: 200,
         headers: {
           'Content-Type': 'image/svg+xml',
-          'Cache-Control': `public, s-maxage=${REVALIDATE_INTERVAL}, stale-while-revalidate=${REVALIDATE_INTERVAL}`,
+          'Cache-Control': `public, s-maxage=${REVALIDATE_INTERVAL - 1}, stale-while-revalidate=${REVALIDATE_INTERVAL}`,
         },
       });
     }

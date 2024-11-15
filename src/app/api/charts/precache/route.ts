@@ -20,9 +20,13 @@ export async function POST(request: NextRequest) {
   const startTime = Date.now();
 
   // Generate all URL combination caches
-  const requests = ['', ...THEMES].flatMap((theme) =>
-    ['', ...VALID_COINS].map(async (coin) => {
-      const url = `${baseURL}${coin ? `?coin=${coin}` : ''}${theme ? `&theme=${theme}` : ''}`;
+  const requests = THEMES.flatMap((theme) =>
+    VALID_COINS.map(async (coin) => {
+      const params = new URLSearchParams();
+      if (coin) params.set('coin', coin);
+      if (theme) params.set('theme', theme);
+
+      const url = `${baseURL}?${params.toString()}`;
       try {
         await fetch(url);
         logMessages.push(`Precaching succeeded: ${url}`);

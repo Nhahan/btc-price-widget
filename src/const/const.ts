@@ -13,7 +13,7 @@ export const COINS = {
 export const VALID_COINS = Object.keys(COINS) as CoinSymbol[];
 
 export const MIN_DAYS = 7;
-export const MAX_DAYS = 31;
+export const MAX_DAYS = 30;
 export const DEFAULT_COIN_SYMBOL = 'btc' as CoinSymbol;
 export const DEFAULT_DAYS = 30;
 export const DEFAULT_THEME: ThemeName = 'default';

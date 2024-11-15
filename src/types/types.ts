@@ -16,11 +16,6 @@ export interface CoinPaprikaData {
   market_cap: number;
 }
 
-export interface CoinAPI {
-  coinId: CoinId;
-  fetchFunction: (coinId: CoinId, days: number) => Promise<CoinDataPoint[]>;
-}
-
 export type CoinSymbol = keyof typeof COINS;
 export type CoinId = (typeof COINS)[CoinSymbol]['id'];
 

@@ -1,8 +1,15 @@
-import { CoinDataPoint, CoinPaprikaData } from '@/types/types';
+import { CoinDataPoint, CoinPaprikaData, CoinSymbol } from '@/types/types';
 import { getCurrentDate, getCurrentTimestamp } from '@/utils/utils';
-import { REVALIDATE_INTERVAL } from '@/const/const';
+import { MAX_DAYS, REVALIDATE_INTERVAL } from '@/const/const';
 
-export const fetchFromCoinGecko = async (coinId: string, days: number): Promise<CoinDataPoint[]> => {
+const days = MAX_DAYS;
+
+/**
+ * Fetches daily price data for a specified coin from CoinGecko.
+ */
+export const fetchFromCoinGecko = async (coinSymbol: CoinSymbol): Promise<CoinDataPoint[]> => {
+  const coinId = COIN_ID_LOOKUP.gecko[coinSymbol];
+
   const response = await fetch(
     `${process.env.COINGECKO_API_URL}/coins/${coinId}/market_chart?vs_currency=usd&days=${days}&interval=daily`,
     {
@@ -23,7 +30,12 @@ export const fetchFromCoinGecko = async (coinId: string, days: number): Promise<
   }));
 };
 
-export const fetchFromCoinPaprika = async (coinId: string, days: number): Promise<CoinDataPoint[]> => {
+/**
+ * Fetches daily price data for a specified coin from CoinPaprika.
+ */
+export const fetchFromCoinPaprika = async (coinSymbol: CoinSymbol): Promise<CoinDataPoint[]> => {
+  const coinId = COIN_ID_LOOKUP.paprika[coinSymbol];
+
   const response = await fetch(
     `${process.env.COINPAPRIKA_API_URL}/coins/${coinId}/ohlcv/historical?start=${getStartDate(
       days,
@@ -44,7 +56,12 @@ export const fetchFromCoinPaprika = async (coinId: string, days: number): Promis
   }));
 };
 
-export const fetchFromCoinCap = async (coinId: string, days: number): Promise<CoinDataPoint[]> => {
+/**
+ * Fetches daily price data for a specified coin from CoinCap.
+ */
+export const fetchFromCoinCap = async (coinSymbol: CoinSymbol): Promise<CoinDataPoint[]> => {
+  const coinId = COIN_ID_LOOKUP.cap[coinSymbol];
+
   const response = await fetch(
     `${process.env.COINCAP_API_URL}/assets/${coinId}/history?interval=d1&start=${getStartTimestamp(
       days,
@@ -65,6 +82,33 @@ export const fetchFromCoinCap = async (coinId: string, days: number): Promise<Co
     date: new Date(item.time).toISOString().slice(0, 10), // YYYY-MM-DD format
     price: parseFloat(item.priceUsd),
   }));
+};
+
+export const COIN_ID_LOOKUP: Record<string, Record<string, string>> = {
+  gecko: {
+    btc: 'bitcoin',
+    eth: 'ethereum',
+    xrp: 'ripple',
+    doge: 'dogecoin',
+    pepe: 'pepe',
+    sol: 'solana',
+  },
+  paprika: {
+    btc: 'bitcoin',
+    eth: 'ethereum',
+    xrp: 'ripple',
+    doge: 'dogecoin',
+    pepe: 'pepe',
+    sol: 'solana',
+  },
+  cap: {
+    btc: 'btc',
+    eth: 'eth',
+    xrp: 'xrp',
+    doge: 'doge',
+    pepe: 'pepe',
+    sol: 'sol',
+  },
 };
 
 const getStartDate = (days: number): string => {

@@ -28,15 +28,14 @@ export const fetchCoinData = async (coinSymbol: CoinSymbol): Promise<CoinDataPoi
     ];
 
     for (const fetcher of dataFetchers) {
-      console.log(`Attempting to fetch data for ${coinSymbol} using ${fetcher.name}`);
       try {
         const data: CoinDataPoint[] = await fetcher(coinSymbol);
 
         if (data.length >= MAX_DAYS) {
+          console.log(`Successfully fetched data for ${coinSymbol} using ${fetcher.name}`);
           return data.slice(-MAX_DAYS);
-        } else {
-          console.warn(`${fetcher.name} returned insufficient data. (Required: ${MAX_DAYS}, Received: ${data.length})`);
         }
+        console.warn(`${fetcher.name} returned insufficient data. (Required: ${MAX_DAYS}, Received: ${data.length})`);
       } catch (error) {
         console.warn(`Error fetching data for ${coinSymbol} using ${fetcher.name}:`, error);
       }

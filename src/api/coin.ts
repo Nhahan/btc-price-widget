@@ -7,7 +7,7 @@ import { MAX_DAYS, REVALIDATE_INTERVAL } from '@/const/const';
  * @param url API endpoint URL
  * @returns JSON response
  */
-const fetchJSON = async (url: string): Promise<any> => {
+async function fetchJSON(url: string): Promise<any> {
   const response = await fetch(url, {
     next: { revalidate: REVALIDATE_INTERVAL },
   });
@@ -18,14 +18,14 @@ const fetchJSON = async (url: string): Promise<any> => {
   }
 
   return response.json();
-};
+}
 
 /**
  * Fetches daily price data for a specified coin from Binance.
  * @param coinSymbol Coin symbol (e.g., 'btc', 'eth')
  * @returns Array of objects containing date and price
  */
-export const fetchFromBinance = async (coinSymbol: CoinSymbol): Promise<CoinDataPoint[]> => {
+export async function fetchFromBinance(coinSymbol: CoinSymbol): Promise<CoinDataPoint[]> {
   const coinId = COIN_ID_LOOKUP.binance[coinSymbol];
   if (!coinId) {
     throw new Error(`Binance does not support the symbol '${coinSymbol}'.`);
@@ -38,14 +38,14 @@ export const fetchFromBinance = async (coinSymbol: CoinSymbol): Promise<CoinData
     date: new Date(item[0]).toISOString().slice(0, 10),
     price: parseFloat(item[4]), // Close price
   }));
-};
+}
 
 /**
  * Fetches daily price data for a specified coin from CoinGecko.
  * @param coinSymbol Coin symbol (e.g., 'btc', 'eth')
  * @returns Array of objects containing date and price
  */
-export const fetchFromCoinGecko = async (coinSymbol: CoinSymbol): Promise<CoinDataPoint[]> => {
+export async function fetchFromCoinGecko(coinSymbol: CoinSymbol): Promise<CoinDataPoint[]> {
   const coinId = COIN_ID_LOOKUP.gecko[coinSymbol];
   if (!coinId) {
     throw new Error(`CoinGecko does not support the symbol '${coinSymbol}'.`);
@@ -60,14 +60,14 @@ export const fetchFromCoinGecko = async (coinSymbol: CoinSymbol): Promise<CoinDa
     date: new Date(timestamp).toISOString().slice(0, 10), // YYYY-MM-DD format
     price,
   }));
-};
+}
 
 /**
  * Fetches daily price data for a specified coin from CoinPaprika.
  * @param coinSymbol Coin symbol (e.g., 'btc', 'eth')
  * @returns Array of objects containing date and price
  */
-export const fetchFromCoinPaprika = async (coinSymbol: CoinSymbol): Promise<CoinDataPoint[]> => {
+export async function fetchFromCoinPaprika(coinSymbol: CoinSymbol): Promise<CoinDataPoint[]> {
   const coinId = COIN_ID_LOOKUP.paprika[coinSymbol];
   if (!coinId) {
     throw new Error(`CoinPaprika does not support the symbol '${coinSymbol}'.`);
@@ -83,14 +83,14 @@ export const fetchFromCoinPaprika = async (coinSymbol: CoinSymbol): Promise<Coin
     date: item.time_open.split('T')[0], // YYYY-MM-DD format
     price: item.close,
   }));
-};
+}
 
 /**
  * Fetches daily price data for a specified coin from CoinCap.
  * @param coinSymbol Coin symbol (e.g., 'btc', 'eth')
  * @returns Array of objects containing date and price
  */
-export const fetchFromCoinCap = async (coinSymbol: CoinSymbol): Promise<CoinDataPoint[]> => {
+export async function fetchFromCoinCap(coinSymbol: CoinSymbol): Promise<CoinDataPoint[]> {
   const coinId = COIN_ID_LOOKUP.cap[coinSymbol];
   if (!coinId) {
     throw new Error(`CoinCap does not support the symbol '${coinSymbol}'.`);
@@ -108,14 +108,14 @@ export const fetchFromCoinCap = async (coinSymbol: CoinSymbol): Promise<CoinData
     date: new Date(item.time).toISOString().slice(0, 10), // YYYY-MM-DD format
     price: parseFloat(item.priceUsd),
   }));
-};
+}
 
 /**
  * Fetches daily price data for a specified coin from CryptoCompare.
  * @param coinSymbol Coin symbol (e.g., 'btc', 'eth')
  * @returns Array of objects containing date and price
  */
-export const fetchFromCryptoCompare = async (coinSymbol: CoinSymbol): Promise<CoinDataPoint[]> => {
+export async function fetchFromCryptoCompare(coinSymbol: CoinSymbol): Promise<CoinDataPoint[]> {
   const coinId = COIN_ID_LOOKUP.cryptocompare[coinSymbol];
   if (!coinId) {
     throw new Error(`CryptoCompare does not support the symbol '${coinSymbol}'.`);
@@ -135,7 +135,7 @@ export const fetchFromCryptoCompare = async (coinSymbol: CoinSymbol): Promise<Co
     date: new Date(item.time * 1000).toISOString().slice(0, 10), // YYYY-MM-DD format
     price: item.close,
   }));
-};
+}
 
 export const COIN_ID_LOOKUP: Record<string, Record<CoinSymbol, string>> = {
   binance: {

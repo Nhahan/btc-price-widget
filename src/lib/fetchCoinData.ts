@@ -42,7 +42,7 @@ export const fetchCoinData = async (coinSymbol: CoinSymbol): Promise<CoinDataPoi
     }
 
     console.error('Failed to fetch data from all sources.');
-    return [];
+    throw new Error('Failed to fetch data from all sources.');
   };
 
   return await unstableCache(fetchFunction, cacheKey, {

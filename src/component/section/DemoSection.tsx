@@ -108,24 +108,41 @@ export default function DemoSection() {
                   >
                     Coin
                   </label>
-                  <select
-                    name='coinSymbol'
-                    id='coinSymbol'
-                    value={coinSymbol}
-                    onChange={handleOptionChange}
-                    className='w-full h-[36px] p-2 rounded'
-                    style={{
-                      backgroundColor: theme.bgColor,
-                      color: theme.textColor,
-                      border: `1px solid ${theme.textColor}`,
-                    }}
-                  >
-                    {VALID_COINS.map((coin) => (
-                      <option key={coin} value={coin}>
-                        {coin.toUpperCase()}
-                      </option>
-                    ))}
-                  </select>
+                  <div className='relative'>
+                    <select
+                      name='coinSymbol'
+                      id='coinSymbol'
+                      value={coinSymbol}
+                      onChange={handleOptionChange}
+                      className='w-full h-[36px] pl-2 pr-10 rounded appearance-none'
+                      style={{
+                        backgroundColor: theme.bgColor,
+                        color: theme.textColor,
+                        border: `1px solid ${theme.textColor}`,
+                        lineHeight: 'normal',
+                      }}
+                    >
+                      {VALID_COINS.map((coin) => (
+                        <option key={coin} value={coin}>
+                          {coin.toUpperCase()}
+                        </option>
+                      ))}
+                    </select>
+                    <div className='pointer-events-none absolute inset-y-0 right-2 flex items-center'>
+                      <svg
+                        className='h-4 w-4'
+                        viewBox='0 0 20 20'
+                        fill='none'
+                        stroke={theme.textColor}
+                        strokeWidth='2'
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        xmlns='http://www.w3.org/2000/svg'
+                      >
+                        <polyline points='6 8 10 12 14 8' />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Theme Selection */}
@@ -137,24 +154,41 @@ export default function DemoSection() {
                   >
                     Theme
                   </label>
-                  <select
-                    name='selectedTheme'
-                    id='selectedTheme'
-                    value={themeName}
-                    onChange={handleOptionChange}
-                    className='w-full h-[36px] p-2 rounded'
-                    style={{
-                      backgroundColor: theme.bgColor,
-                      color: theme.textColor,
-                      border: `1px solid ${theme.textColor}`,
-                    }}
-                  >
-                    {Object.keys(themes).map((themeName) => (
-                      <option key={themeName} value={themeName}>
-                        {themeName.charAt(0).toUpperCase() + themeName.slice(1)}
-                      </option>
-                    ))}
-                  </select>
+                  <div className='relative'>
+                    <select
+                      name='selectedTheme'
+                      id='selectedTheme'
+                      value={themeName}
+                      onChange={handleOptionChange}
+                      className='w-full h-[36px] pl-2 pr-10 rounded appearance-none'
+                      style={{
+                        backgroundColor: theme.bgColor,
+                        color: theme.textColor,
+                        border: `1px solid ${theme.textColor}`,
+                        lineHeight: 'normal',
+                      }}
+                    >
+                      {Object.keys(themes).map((themeName) => (
+                        <option key={themeName} value={themeName}>
+                          {themeName.charAt(0).toUpperCase() + themeName.slice(1)}
+                        </option>
+                      ))}
+                    </select>
+                    <div className='pointer-events-none absolute inset-y-0 right-2 flex items-center'>
+                      <svg
+                        className='h-4 w-4'
+                        viewBox='0 0 20 20'
+                        fill='none'
+                        stroke={theme.textColor}
+                        strokeWidth='2'
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        xmlns='http://www.w3.org/2000/svg'
+                      >
+                        <polyline points='6 8 10 12 14 8' />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
               </form>
             </div>
@@ -173,21 +207,21 @@ export default function DemoSection() {
                 Add to your README
               </h3>
               <div
-                className='relative p-4 rounded-lg border'
+                className='relative p-2 h-[36px] flex items-center rounded border'
                 style={{
                   backgroundColor: theme.bgColor,
                   border: `1px solid ${theme.textColor}`,
                 }}
               >
                 <code
-                  className='block text-sm truncate max-w-full overflow-hidden whitespace-nowrap pr-4'
+                  className='block text-sm truncate max-w-full overflow-hidden pr-4'
                   style={{ color: theme.textColor }}
                 >
                   {markdownCode}
                 </code>
                 <button
                   onClick={handleCopy}
-                  className='absolute top-3 right-2 p-1 rounded hover:opacity-80 transition-opacity'
+                  className='absolute top-1 right-1 p-1 rounded hover:opacity-80 transition-opacity'
                   aria-label='Copy Markdown Code'
                 >
                   {copied ? (

@@ -12,10 +12,10 @@ export const themes: Record<string, Theme> = {
     pointColor: '#ffa500',
   },
   forest: {
-    bgColor: '#228b22',
-    lineColor: '#adff2f',
-    textColor: '#ffffff',
-    pointColor: '#00ff7f',
+    bgColor: '#4c8c4a',
+    lineColor: '#88c78b',
+    textColor: '#f0f5e5',
+    pointColor: '#5ea864',
   },
   ocean: {
     bgColor: '#add8e6',
@@ -107,7 +107,6 @@ export const themes: Record<string, Theme> = {
     textColor: '#01579b',
     pointColor: '#ffab40',
   },
-
   autumn: {
     bgColor: '#fffaf0',
     lineColor: '#ff8c00',
@@ -119,6 +118,30 @@ export const themes: Record<string, Theme> = {
     lineColor: '#5dade2',
     textColor: '#c1d9ff',
     pointColor: '#a0c4ff',
+  },
+  galaxy: {
+    bgColor: '#2d033b',
+    lineColor: '#7d5ba6',
+    textColor: '#f0f5ff',
+    pointColor: '#e5e5e5',
+  },
+  nebula: {
+    bgColor: '#4a0033',
+    lineColor: '#ff67d2',
+    textColor: '#b3ffe7',
+    pointColor: '#6bffb8',
+  },
+  mars: {
+    bgColor: '#712f1f',
+    lineColor: '#da8033',
+    textColor: '#f6d6ad',
+    pointColor: '#e07738',
+  },
+  void: {
+    bgColor: '#050505',
+    lineColor: '#1f1b33',
+    textColor: '#6f7285',
+    pointColor: '#9b59b6',
   },
 };
 

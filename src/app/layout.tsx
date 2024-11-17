@@ -1,5 +1,6 @@
 import './globals.css';
 import { ReactNode, Suspense } from 'react';
+import ThemeProvider from '@/provider/ThemeProvider';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -8,7 +9,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <title>Crypto Chart Widget</title>
       </head>
       <body>
-        <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+        <ThemeProvider>
+          <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+        </ThemeProvider>
       </body>
     </html>
   );

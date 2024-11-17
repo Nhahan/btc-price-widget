@@ -1,5 +1,7 @@
-import { createContext, ReactNode, useContext, useState } from "react";
-import { Theme, ThemeName, themes } from "@/types/theme";
+'use client';
+
+import { createContext, ReactNode, useContext, useState } from 'react';
+import { Theme, ThemeName, themes } from '@/types/theme';
 
 interface ThemeContextType {
   theme: Theme;
@@ -14,12 +16,8 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
 
   const theme = themes[themeName];
 
-  return (
-    <ThemeContext.Provider value={{ theme, themeName, setThemeName }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-};
+  return <ThemeContext.Provider value={{ theme, themeName, setThemeName }}>{children}</ThemeContext.Provider>;
+}
 
 export const useTheme = () => {
   const context = useContext(ThemeContext);

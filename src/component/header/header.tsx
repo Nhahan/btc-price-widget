@@ -1,12 +1,12 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Github } from 'lucide-react';
-import { themes } from '@/types/theme';
+import { useTheme } from '@/provider/ThemeProvider';
 
 export default function Header() {
+  const { theme } = useTheme();
   const { scrollY } = useScroll();
   const opacity = useTransform(scrollY, [0, 600], [1, 0]);
   const pointerEvents = useTransform(opacity, (value) => (value <= 0.1 ? 'none' : 'auto'));
-  const theme = themes['default'];
 
   return (
     <motion.header

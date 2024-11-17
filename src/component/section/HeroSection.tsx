@@ -1,10 +1,10 @@
 import ParallaxSection from '../motion/ParallaxSection';
 import FadeIn from '../motion/FadeIn';
-import { themes } from '@/types/theme';
 import useRevealOnScroll from '@/hook/useRevealOnScroll';
+import { useTheme } from '@/provider/ThemeProvider';
 
 export default function HeroSection() {
-  const theme = themes['default'];
+  const { theme } = useTheme();
   const { isRevealed, revealRef } = useRevealOnScroll();
 
   return (

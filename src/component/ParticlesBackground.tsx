@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import Particles, { initParticlesEngine } from '@tsparticles/react';
 import { loadSlim } from '@tsparticles/slim';
+import { useTheme } from '@/provider/ThemeProvider';
 
 export default function ParticlesBackground() {
+  const { theme } = useTheme();
   const [init, setInit] = useState(false);
 
   useEffect(() => {
@@ -53,13 +55,13 @@ export default function ParticlesBackground() {
             },
             particles: {
               color: {
-                value: '#ffffff',
+                value: theme.textColor,
               },
               links: {
-                color: '#ffffff',
+                color: theme.textColor,
                 distance: 150,
                 enable: true,
-                opacity: 0.35,
+                opacity: 0.25,
                 width: 1,
               },
               collisions: {

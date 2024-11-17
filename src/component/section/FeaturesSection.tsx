@@ -1,11 +1,11 @@
 import FadeIn from '../motion/FadeIn';
-import { themes } from '@/types/theme';
 import ParallaxSection from '@/component/motion/ParallaxSection';
 import TypingEffect from '@/component/TypingEffect';
 import useRevealOnScroll from '@/hook/useRevealOnScroll';
+import { useTheme } from '@/provider/ThemeProvider';
 
 export default function FeaturesSection() {
-  const theme = themes['default'];
+  const { theme } = useTheme();
   const { isRevealed, revealRef } = useRevealOnScroll();
 
   const features = [

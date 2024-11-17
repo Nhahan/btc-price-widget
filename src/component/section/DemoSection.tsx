@@ -103,7 +103,7 @@ export default function DemoSection() {
                 <div>
                   <label
                     htmlFor='coinSymbol'
-                    className='block text-sm font-medium mb-1'
+                    className='block text-sm font-bold mb-1'
                     style={{ color: theme.textColor }}
                   >
                     Coin
@@ -149,7 +149,7 @@ export default function DemoSection() {
                 <div>
                   <label
                     htmlFor='selectedTheme'
-                    className='block text-sm font-medium mb-1'
+                    className='block text-sm font-bold mb-1'
                     style={{ color: theme.textColor }}
                   >
                     Theme

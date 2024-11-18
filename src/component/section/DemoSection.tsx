@@ -22,14 +22,16 @@ export default function DemoSection() {
 
   useEffect(() => {
     const coinSettings = COINS[coinSymbol];
-    const generatedData = generateFakeCoinData(
-      DEFAULT_DAYS,
-      coinSettings.basePrice,
-      coinSettings.variation,
-      coinSettings.rate,
-      coinSettings.toFixed,
-    );
-    setData(generatedData);
+    if (coinSettings) {
+      const generatedData = generateFakeCoinData(
+        DEFAULT_DAYS,
+        coinSettings.basePrice,
+        coinSettings.variation,
+        coinSettings.rate,
+        coinSettings.toFixed,
+      );
+      setData(generatedData);
+    }
   }, [coinSymbol]);
 
   const { isRevealed, revealRef } = useRevealOnScroll();
@@ -55,9 +57,9 @@ export default function DemoSection() {
   const handleOptionChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
 
-    if (name === 'selectedTheme') {
+    if (name === 'selectedTheme' && value !== themeName) {
       setThemeName(value as typeof themeName);
-    } else if (name === 'coinSymbol') {
+    } else if (name === 'coinSymbol' && value !== coinSymbol) {
       setCoinSymbol(value as CoinSymbol);
     }
   };

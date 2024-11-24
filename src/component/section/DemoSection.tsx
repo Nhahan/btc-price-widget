@@ -85,7 +85,13 @@ export default function DemoSection() {
             >
               <div>
                 {data.length > 0 && (
-                  <ChartComponent data={data} coinSymbol={coinSymbol} days={DEFAULT_DAYS} options={options} />
+                  <ChartComponent
+                    key={coinSymbol}
+                    data={data}
+                    coinSymbol={coinSymbol}
+                    days={DEFAULT_DAYS}
+                    options={options}
+                  />
                 )}
               </div>
             </div>

@@ -14,7 +14,7 @@ Add this to your `README.md`:
 
 ## Demo and Custom Widget Setup
 
-- [**Interactive Demo & Setup Link**](https://btc-price-widget.vercel.app/api/charts)
+- [**Interactive Demo & Setup Link**](https://btc-price-widget.vercel.app/)
 
 ## Supported Coins
 

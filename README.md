@@ -6,7 +6,7 @@ This is a cryptocurrency widget that can be added to a GitHub README. The widget
 
 ## Quick Start
 
-To add the Crypto Chart Widget to your GitHub README, include the following markdown code:
+Add this to your `README.md`:
 
 ```markdown
 ![Chart](https://btc-price-widget.vercel.app/api/charts)

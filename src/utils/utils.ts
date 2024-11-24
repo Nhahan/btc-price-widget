@@ -57,3 +57,42 @@ export function generateFakeCoinData(days = MAX_DAYS, basePrice = 82500, variati
     return { date, price: parseFloat(finalPrice.toFixed(toFixed)) };
   });
 }
+
+export function invertColor(hex: string): { color: string; opacity: number } {
+  if (hex.startsWith('#')) {
+    hex = hex.slice(1);
+  }
+  if (hex.length === 3) {
+    hex = hex
+      .split('')
+      .map((char) => char + char)
+      .join('');
+  }
+  const r = 255 - parseInt(hex.slice(0, 2), 16);
+  const g = 255 - parseInt(hex.slice(2, 4), 16);
+  const b = 255 - parseInt(hex.slice(4, 6), 16);
+
+  const color = `${r}, ${g}, ${b}`;
+  const opacity = calculateOpacity(hex);
+  return { color, opacity };
+}
+
+export function calculateOpacity(hex: string): number {
+  if (hex.startsWith('#')) {
+    hex = hex.slice(1);
+  }
+  if (hex.length === 3) {
+    hex = hex
+      .split('')
+      .map((char) => char + char)
+      .join('');
+  }
+  const r = parseInt(hex.slice(0, 2), 16);
+  const g = parseInt(hex.slice(2, 4), 16);
+  const b = parseInt(hex.slice(4, 6), 16);
+
+  const brightness = r * 0.299 + g * 0.587 + b * 0.114;
+
+  const opacity = 0.1 + (brightness / 255) * 0.4;
+  return Math.max(0.1, Math.min(0.4, opacity));
+}

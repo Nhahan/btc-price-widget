@@ -6,7 +6,7 @@ import TypingEffect from '@/component/TypingEffect';
 import useRevealOnScroll from '@/hook/useRevealOnScroll';
 import ChartComponent from '@/component/ChartComponent';
 import { CoinDataPoint, CoinSymbol } from '@/types/types';
-import { generateFakeCoinData } from '@/utils/utils';
+import { generateFakeCoinData, invertColor } from '@/utils/utils';
 import { COINS, DEFAULT_DAYS, VALID_COINS } from '@/const/const';
 import { useTheme } from '@/provider/ThemeProvider';
 import { themes } from '@/types/theme';
@@ -239,43 +239,4 @@ export default function DemoSection() {
       </div>
     </ParallaxSection>
   );
-}
-
-function invertColor(hex: string): { color: string; opacity: number } {
-  if (hex.startsWith('#')) {
-    hex = hex.slice(1);
-  }
-  if (hex.length === 3) {
-    hex = hex
-      .split('')
-      .map((char) => char + char)
-      .join('');
-  }
-  const r = 255 - parseInt(hex.slice(0, 2), 16);
-  const g = 255 - parseInt(hex.slice(2, 4), 16);
-  const b = 255 - parseInt(hex.slice(4, 6), 16);
-
-  const color = `${r}, ${g}, ${b}`;
-  const opacity = calculateOpacity(hex);
-  return { color, opacity };
-}
-
-function calculateOpacity(hex: string): number {
-  if (hex.startsWith('#')) {
-    hex = hex.slice(1);
-  }
-  if (hex.length === 3) {
-    hex = hex
-      .split('')
-      .map((char) => char + char)
-      .join('');
-  }
-  const r = parseInt(hex.slice(0, 2), 16);
-  const g = parseInt(hex.slice(2, 4), 16);
-  const b = parseInt(hex.slice(4, 6), 16);
-
-  const brightness = r * 0.299 + g * 0.587 + b * 0.114;
-
-  const opacity = 0.1 + (brightness / 255) * 0.4;
-  return Math.max(0.1, Math.min(0.4, opacity));
 }

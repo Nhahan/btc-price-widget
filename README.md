@@ -12,7 +12,7 @@ Add this to your `README.md`:
 ![Chart](https://btc-price-widget.vercel.app/api/charts)
 ```
 
-## Demo and Custom Widget Setup
+## Custom Widget Setup
 
 - [**Demo & Setup Link**](https://btc-price-widget.vercel.app/)
 
